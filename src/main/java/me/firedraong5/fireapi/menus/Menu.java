@@ -1,5 +1,6 @@
 package me.firedraong5.fireapi.menus;
 
+import com.google.gson.JsonArray;
 import me.firedraong5.fireapi.utils.UtilsMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,6 +25,43 @@ public class Menu implements Listener {
 //	This is a menu class that will be used to create menus
 //	This is to make the creation of menu easier
 
+
+//	Store the actions of the buttons
+	private final List<ClickAction> actions = new ArrayList<>();
+
+	//	Stop the player click event
+	@EventHandler
+	public void onPlayerClick(InventoryClickEvent event) {
+
+		if (event.getView().getTitle().equals(menuTitle)) {
+			event.setCancelled(true);
+
+//			Get the action of the button
+			ClickAction action = null;
+			for (int i = 0; i < menu.getSize(); i++) {
+				if (event.getSlot() == i) {
+					ItemStack item = event.getClickedInventory().getItem(i);
+					if (item != null) {
+						ItemMeta itemMeta = item.getItemMeta();
+						if (itemMeta != null) {
+							String displayName = itemMeta.getDisplayName();
+							if (displayName != null) {
+								for (int j = 0; j < menu.getSize(); j++) {
+									if (event.getSlot() == j) {
+										action = actions.get(j);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if (action != null) {
+				action.onClick((Player) event.getWhoClicked());
+			}
+
+		}
+	}
 
 	private String menuTitle;
 	private int menuSize;
@@ -109,14 +147,7 @@ public class Menu implements Listener {
 	}
 
 
-//	Stop the player click event
-	@EventHandler
-	public void onPlayerClick(InventoryClickEvent event) {
 
-		if (event.getView().getTitle().equals(menuTitle)) {
-			event.setCancelled(true);
-		}
-	}
 
 
 	/**
@@ -128,11 +159,20 @@ public class Menu implements Listener {
 	 * @param action - This is the action of the player head
 	 */
 
-	public void addPlayerHeads(Player player, @Nullable String displayName,
+	public void addPlayerHeadsButton(Player player, @Nullable String displayName,
 							   int slot, @Nullable List<String> lore, ClickAction action) {
 		ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta playerHeadMeta = (SkullMeta) playerHead.getItemMeta();
-		playerHeadMeta.setDisplayName(UtilsMessage.onChat(displayName));
+
+		//		If the display name is null then set the display name to the player name
+		if (displayName == null) {
+			playerHeadMeta.setDisplayName(UtilsMessage.onChat(player.getDisplayName()));
+		} else {
+			playerHeadMeta.setDisplayName(UtilsMessage.onChat(displayName));
+		}
+
+
+
 
 		if (lore != null) {
 			List<String> updatedLore = new ArrayList<>();
@@ -158,13 +198,18 @@ public class Menu implements Listener {
 	 * This will return all the players on the server heads
 	 *
 	 */
-	public void addAllPlayerHeads(Player player, @Nullable String displayName,
+	public void addAllPlayerHeadsButton(Player player, @Nullable String displayName,
 							   int slot, List<String> lore,  ClickAction action) {
 		for (Player players : Bukkit.getOnlinePlayers()){
 			ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
 			SkullMeta playerHeadMeta = (SkullMeta) playerHead.getItemMeta();
 
-			playerHeadMeta.setDisplayName(UtilsMessage.onChat(displayName));
+			//		If the display name is null then set the display name to the player name
+			if (displayName == null) {
+				playerHeadMeta.setDisplayName(UtilsMessage.onChat(players.getDisplayName()));
+			} else {
+				playerHeadMeta.setDisplayName(UtilsMessage.onChat(displayName));
+			}
 
 			if (lore != null) {
 				List<String> updatedLore = new ArrayList<>();
