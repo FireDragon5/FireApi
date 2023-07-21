@@ -50,6 +50,8 @@ public class Menu implements Listener {
 	public Inventory getMenu() {
 		return menu;
 	}
+
+
 	/**
 	 * 	Menu creation methods
 	 * @param name - This is the name of the item
@@ -74,7 +76,7 @@ public class Menu implements Listener {
 		newItem.setItemMeta(itemMeta);
 
 		menu.setItem(slot, newItem);
-		actions.add(action); // Store the action associated with the button
+		actions.add(action);
 	}
 
 	@EventHandler
