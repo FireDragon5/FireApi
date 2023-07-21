@@ -1,27 +1,35 @@
 package me.firedraong5.fireapi.utils;
 
-import jdk.jfr.internal.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class UtilsMessage implements Listener {
 
-	public static String onChat(String s) {
+	@Contract("_ -> new")
+	public static @NotNull String onChat(String s) {
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 
 
-
-//	Create a player send message
-	public static void playerSendMessage(Player player, String message) {
+	/**
+	 * Will send the player a message
+	 * @param player - This is the player
+	 * @param message - This is the message
+	 */
+	public static void playerSendMessage(@NotNull Player player, String message) {
 		player.sendMessage(onChat(message));
 
 	}
 
 
-//	Broadcast a message to all players
+	/**
+	 * Will send the player a message
+	 * @param message - This is the message
+	 */
 	public static void broadcastMessage(String message) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			player.sendMessage(onChat(message));
@@ -29,37 +37,91 @@ public class UtilsMessage implements Listener {
 	}
 
 
-//	Correct message with a green check mark
-	public static void correctMessage(Player player, String message) {
-		player.sendMessage(onChat("&a&l[✔] &a" + message));
+	/**
+	 * Will send the player a message
+	 * @param message - This is the message
+	 */
+	public static void correctMessage(@NotNull Player player, String message) {
+		player.sendMessage(onChat("&8&l[&a✔&8&l] &f" + message));
 	}
 
 
-//	Incorrect message with a red X
-	public static void incorrectMessage(Player player, String message) {
-		player.sendMessage(onChat("&c&l[✘] &c" + message));
+	/**
+	 * Will send the player a message
+	 * @param message - This is the message
+	 *                (This message will be red)
+	 *                for example, [✘] This is a message
+	 */
+	public static void incorrectMessage(@NotNull Player player, String message) {
+		player.sendMessage(onChat("&8&l[&c✘&8&l] &f" + message));
 	}
 
-//	Error message
-	public static void errorMessage(Player player, String message) {
-		player.sendMessage(onChat("&c&l[!] &c" + message));
+	/**
+	 * Will send the player a message
+	 * @param message - This is the message
+	 *                for example, [!]This is a message
+	 */
+	public static void errorMessage(@NotNull Player player, String message) {
+		player.sendMessage(onChat("&8&l[&c✘&8&l] &f" + message));
 	}
 
-//	Warning message
-	public static void warningMessage(Player player, String message) {
-		player.sendMessage(onChat("&e&l[!] &e" + message));
+	/**
+	 * Will send the player a message
+	 * @param message - This is the message
+	 *                (This message will be red)
+	 *                for example, [!] This is a message
+	 */
+	public static void warningMessage(@NotNull Player player, String message) {
+		player.sendMessage(onChat("&8&l[&c✘&8&l] &f" + message));
 	}
 
 
-//	Join message
-	public static void joinMessage(Player player) {
-		broadcastMessage("&a&l[+] &a" + player.getName() + " has joined the game");
+	/**
+	 * Will send the player a message
+	 * @param player - This is the player
+	 * @param message - This is the message
+	 */
+	public void noPermissionMessage(@NotNull Player player, String message) {
+		player.sendMessage(onChat(message));
 	}
 
-//	Leave message
-	public static void leaveMessage(Player player) {
-		broadcastMessage("&c&l[-] &c" + player.getName() + " has left the game");
+	/**
+	 * Will send the player a message
+	 * @param player - This is the player
+	 * @param title - This is the title
+	 * @param subtitle - This is the subtitle
+	 */
+	public static void titleMessage(@NotNull Player player, String title, String subtitle) {
+		player.sendTitle(onChat(title), onChat(subtitle));
 	}
+
+	/**
+	 * Will send the player a message
+	 * @param player - This is the player
+	 * @param title - This is the title
+	 * @param subtitle - This is the subtitle
+	 * @param fadeIn - This is the fade in time
+	 * @param stay - This is the stay time
+	 * @param fadeOut - This is the fade out time
+	 */
+	public static void titleMessage(@NotNull Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+		player.sendTitle(onChat(title), onChat(subtitle), fadeIn, stay, fadeOut);
+	}
+
+	/**
+	 * Will send the player a message
+	 * @param player - This is the player
+	 * @param message - This is the message
+	 */
+	public static void actionBarMessage(@NotNull Player player, String message) {
+		player.sendActionBar(onChat(message));
+	}
+
+
+
+
+
+
 
 
 
