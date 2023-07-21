@@ -1,10 +1,8 @@
 package me.firedraong5.fireapi.menus;
 
-import com.google.gson.JsonArray;
 import me.firedraong5.fireapi.utils.UtilsMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,70 +11,31 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Menu implements Listener {
 
-//	This is a menu class that will be used to create menus
-//	This is to make the creation of menu easier
-
-
-//	Store the actions of the buttons
+	private final String menuTitle;
+	private final int menuSize;
+	private final Inventory menu;
 	private final List<ClickAction> actions = new ArrayList<>();
 
-	//	Stop the player click event
-	@EventHandler
-	public void onPlayerClick(InventoryClickEvent event) {
-
-		if (event.getView().getTitle().equals(menuTitle)) {
-			event.setCancelled(true);
-
-//			Get the action of the button
-			ClickAction action = null;
-			for (int i = 0; i < menu.getSize(); i++) {
-				if (event.getSlot() == i) {
-					ItemStack item = event.getClickedInventory().getItem(i);
-					if (item != null) {
-						ItemMeta itemMeta = item.getItemMeta();
-						if (itemMeta != null) {
-							String displayName = itemMeta.getDisplayName();
-							if (displayName != null) {
-								for (int j = 0; j < menu.getSize(); j++) {
-									if (event.getSlot() == j) {
-										action = actions.get(j);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if (action != null) {
-				action.onClick((Player) event.getWhoClicked());
-			}
-
-		}
-	}
-
-	private String menuTitle;
-	private int menuSize;
-
-	private Inventory menu;
-
 	public Menu(String menuTitle, int menuSize) {
-		this.menuTitle = menuTitle;
+		this.menuTitle = UtilsMessage.onChat(menuTitle);
 		this.menuSize = menuSize;
-		this.menu = Bukkit.createInventory(null, menuSize, menuTitle);
+		this.menu = Bukkit.createInventory(null, menuSize, this.menuTitle);
 	}
 
 	public Menu(){
-
+		this.menuTitle = null;
+		this.menuSize = 0;
+		this.menu = null;
 	}
+
 
 	public String getMenuTitle() {
 		return menuTitle;
@@ -86,41 +45,24 @@ public class Menu implements Listener {
 		return menuSize;
 	}
 
+
+
 	public Inventory getMenu() {
 		return menu;
 	}
-
-	public void setMenuTitle(String menuTitle) {
-		this.menuTitle = menuTitle;
-	}
-
-	public void setMenuSize(int menuSize) {
-		this.menuSize = menuSize;
-	}
-
-	public void setMenu(Inventory menu) {
-		this.menu = menu;
-	}
-
 	/**
-	* 	Menu creation methods
-	* @param name - This is the name of the item
-	* @param slot - This is the slot of the item
-	* @param item - This is the itemstack
-	* @param lore - This is a list of strings
+	 * 	Menu creation methods
+	 * @param name - This is the name of the item
+	 * @param slot - This is the slot of the item
+	 * @param item - This is the itemstack
+	 * @param lore - This is a list of strings
 	 */
-	public void addButton(String name, int slot, Material item, @Nullable List<String> lore , ClickAction action) {
-
-		//Create a new item
+	public void addButton(String name, int slot, Material item, @Nullable List<String> lore, ClickAction action) {
 		ItemStack newItem = new ItemStack(item);
-
-		//Set the item name
 		ItemMeta itemMeta = newItem.getItemMeta();
 
 		itemMeta.setDisplayName(UtilsMessage.onChat(name));
 
-		//Set the item lore
-		// Set the item lore
 		if (lore != null) {
 			List<String> updatedLore = new ArrayList<>();
 			for (String line : lore) {
@@ -129,18 +71,23 @@ public class Menu implements Listener {
 			itemMeta.setLore(updatedLore);
 		}
 
-		//Set the item meta
 		newItem.setItemMeta(itemMeta);
 
-		//Set the item to the menu
 		menu.setItem(slot, newItem);
+		actions.add(action); // Store the action associated with the button
 	}
 
-//	Open the menu
-	public void openMenu(Player player) {
-		player.openInventory(menu);
-	}
+	@EventHandler
+	public void onPlayerClick(@NotNull InventoryClickEvent event) {
+		if (event.getView().getTitle().equals(menuTitle)) {
+			event.setCancelled(true);
 
+			ClickAction action = actions.get(event.getRawSlot());
+			if (action != null) {
+				action.onClick((Player) event.getWhoClicked());
+			}
+		}
+	}
 
 	public interface ClickAction {
 		void onClick(Player player);
@@ -148,6 +95,10 @@ public class Menu implements Listener {
 
 
 
+//	Open the menu
+	public void openMenu(Player player) {
+		player.openInventory(menu);
+	}
 
 
 	/**
@@ -161,6 +112,8 @@ public class Menu implements Listener {
 
 	public void addPlayerHeadsButton(Player player, @Nullable String displayName,
 							   int slot, @Nullable List<String> lore, ClickAction action) {
+
+
 		ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta playerHeadMeta = (SkullMeta) playerHead.getItemMeta();
 
@@ -171,9 +124,6 @@ public class Menu implements Listener {
 			playerHeadMeta.setDisplayName(UtilsMessage.onChat(displayName));
 		}
 
-
-
-
 		if (lore != null) {
 			List<String> updatedLore = new ArrayList<>();
 			for (String line : lore) {
@@ -181,6 +131,10 @@ public class Menu implements Listener {
 			}
 			playerHeadMeta.setLore(updatedLore);
 		}
+
+		playerHeadMeta.setOwningPlayer(player);
+
+		playerHead.setItemMeta(playerHeadMeta);
 
 		menu.setItem(slot, playerHead);
 	}
@@ -224,6 +178,25 @@ public class Menu implements Listener {
 			menu.setItem(slot, playerHead);
 		}
 	}
+
+	/**
+	 * This will show the numbers of the slots
+	 *
+	 * Use this only for debugging purposes
+	 */
+	public void showSlots(){
+		int slotNumber = 0 ;
+
+		for (int i = 0; i < menuSize; i++) {
+			ItemStack itemStack = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
+			ItemMeta itemMeta = itemStack.getItemMeta();
+			itemMeta.setDisplayName(UtilsMessage.onChat("&c&l" + slotNumber));
+			itemStack.setItemMeta(itemMeta);
+			menu.setItem(slotNumber, itemStack);
+			slotNumber++;
+		}
+	}
+
 
 
 
