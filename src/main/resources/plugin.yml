@@ -1,0 +1,4 @@
+name: FiresApi
+version: '${project.version}'
+main: me.firedraong5.firesapi.FiresApi
+api-version: '1.20'
