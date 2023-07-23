@@ -3,8 +3,6 @@ package me.firedraong5.firesapi.utils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 public class UtilsMessage implements Listener {
 
@@ -14,8 +12,7 @@ public class UtilsMessage implements Listener {
 	 * @param s String to translate
 	 * @return String translated
 	 */
-	@Contract("_ -> new")
-	public static @NotNull String onChat(String s){
+	public static String onChat(String s){
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 
