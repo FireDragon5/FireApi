@@ -126,7 +126,7 @@ public class CustomItemCreator {
 	 * @param player Player to add the item
 	 */
 
-	public static void addToInventory(ItemStack item, Player player) {
+	public static void addToInventory(Player player,ItemStack item) {
 		player.getInventory().addItem(item);
 	}
 
