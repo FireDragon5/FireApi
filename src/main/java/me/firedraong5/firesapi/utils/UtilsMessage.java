@@ -1,6 +1,7 @@
 package me.firedraong5.firesapi.utils;
 
 import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -134,9 +135,28 @@ public class UtilsMessage implements Listener {
 
 /*
 
-	Server Messages
+	Server Chat Messages
 
  */
+
+
+	/**
+	 * Clickable message to send to the player
+	 * @param player Player to send the message
+	 * @param message Message to send
+	 * @param command Command to run when clicked
+	 */
+	public static void clickableMessage(Player player, String message, String command){
+
+		TextComponent messageComponent = new TextComponent(onChat(message));
+		messageComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+
+		UtilsMessage.sendMessage(player, messageComponent.toLegacyText());
+
+	}
+
+
+//	Send all the players server info
 
 
 

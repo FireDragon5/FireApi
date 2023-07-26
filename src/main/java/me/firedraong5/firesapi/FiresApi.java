@@ -17,6 +17,8 @@ public final class FiresApi extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+
+
+
     }
 }
