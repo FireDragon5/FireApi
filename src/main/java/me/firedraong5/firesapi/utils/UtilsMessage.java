@@ -1,5 +1,7 @@
 package me.firedraong5.firesapi.utils;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -17,11 +19,9 @@ public class UtilsMessage implements Listener {
 	}
 
 
-
-
 /*
 
-	Normal messages
+	Normal player messages
 
  */
 
@@ -81,13 +81,62 @@ public class UtilsMessage implements Listener {
 	 * This will send the player a message with the prefix
 	 * <br>&8[&c✖&8] &7You don't have the permission &c" + prems + " &7to do that!
 	 * @param player Player to send the message
-	 * @param prems Permission that the player doesn't have
+	 * @param permission Permission that the player doesn't have
 	 */
-	public static void noPremsMessage(Player player, String prems){
-		player.sendMessage(onChat("&8[&c✖&8] &7You don't have the permission &c" + prems + " &7to do that!"));
+	public static void noPermissionMessage(Player player, String permission){
+		player.sendMessage(onChat("&8[&c✖&8] &7You don't have the permission &c" + permission + " &7to do that!"));
 	}
 
 
+	/**
+	 * Title message to send to the player
+	 * @param player Player to send the message
+	 * @param title Title to send
+	 * @param subtitle Subtitle to send
+	 * @param fadeIn Fade in time - 20 ticks = 1 second
+	 * @param stay Stay time - 20 ticks = 1 second
+	 * @param fadeOut Fade out time - 20 ticks = 1 second
+	 */
+	public static void titleMessage(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut){
+		player.sendTitle(onChat(title), onChat(subtitle), fadeIn, stay, fadeOut);
+	}
+
+
+	/**
+	 * Title message to send to the player
+	 * fadeIn - 10 ticks = .5 second
+	 * stay - 70 ticks = 3.5 seconds
+	 * fadeOut - 20 ticks = 1 second
+	 * @param player Player to send the message
+	 * @param title Title to send
+	 * @param subtitle Subtitle to send
+	 */
+	public static void titleMessage(Player player, String title, String subtitle){
+		player.sendTitle(onChat(title), onChat(subtitle), 10, 70, 20);
+	}
+
+
+//	Action bar message
+	/**
+	 * Action bar message to send to the player
+	 * @param player Player to send the message
+	 * @param message Message to send
+	 */
+	public static void actionBarMessage(Player player, String message){
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+				TextComponent.fromLegacyText(onChat(message)));
+
+	}
+
+
+
+
+
+/*
+
+	Server Messages
+
+ */
 
 
 
