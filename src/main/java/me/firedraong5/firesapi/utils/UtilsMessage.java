@@ -76,12 +76,12 @@ public class UtilsMessage implements Listener {
 		player.sendMessage(onChat("&8[&e!&8] &7" + message));
 	}
 
-//	No premession message
+//	No Permission message
 	/**
 	 * This will send the player a message with the prefix
 	 * <br>&8[&c✖&8] &7You don't have the permission &c" + prems + " &7to do that!
 	 * @param player Player to send the message
-	 * @param prems Premission that the player doesn't have
+	 * @param prems Permission that the player doesn't have
 	 */
 	public static void noPremsMessage(Player player, String prems){
 		player.sendMessage(onChat("&8[&c✖&8] &7You don't have the permission &c" + prems + " &7to do that!"));
