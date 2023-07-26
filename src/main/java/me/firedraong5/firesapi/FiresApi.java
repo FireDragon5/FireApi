@@ -10,6 +10,7 @@ public final class FiresApi extends JavaPlugin {
     public void onEnable() {
 
         getServer().getPluginManager().registerEvents(new UtilsMessage(), this);
+
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
 
     }
