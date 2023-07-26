@@ -3,6 +3,7 @@ package me.firedraong5.firesapi.menu;
 import me.firedraong5.firesapi.error.Valid;
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class Menu {
 
@@ -118,13 +119,16 @@ public class Menu {
 		viewer = player;
 
 		MenuCreator menuCreator = new MenuCreator(size, title);
+		
+		
+		
 
 
 	}
 
+	public void handleMenu(InventoryClickEvent event) {
 
+		event.setCancelled(true);
 
-
-
-
+	}
 }
