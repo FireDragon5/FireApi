@@ -1,11 +1,13 @@
 package me.firedraong5.firesapi.itemCreation;
 
+import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class CustomItemCreator {
 
@@ -94,8 +96,8 @@ public class CustomItemCreator {
 	public static ItemStack createItem(Material material, int amount, String name, String... lore) {
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(name);
-		meta.setLore(Arrays.asList(lore));
+		meta.setDisplayName(UtilsMessage.onChat(name));
+		meta.setLore(Collections.singletonList(UtilsMessage.onChat(Arrays.toString(lore))));
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -112,12 +114,37 @@ public class CustomItemCreator {
 	public static ItemStack createItem(Material material, int amount, String name, int durability, String... lore) {
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(name);
-		meta.setLore(Arrays.asList(lore));
+		meta.setDisplayName(UtilsMessage.onChat(name));
+		meta.setLore(Collections.singletonList(UtilsMessage.onChat(Arrays.toString(lore))));
 		item.setItemMeta(meta);
 		item.setDurability((short) durability);
 		return item;
 	}
+
+	/**
+	 * Create a new item
+	 * @param player Player to send the message
+	 * @param material Material of the item
+	 * @param amount Amount of the item
+	 * @param name Name of the item
+	 * @param lore Lore of the item
+	 * @param playerMessage Message to send to the player
+	 * @return The item
+	 */
+	public static ItemStack createItemWithPlayerMessage(Player player,Material material, int amount, String name, int durability,
+									  String playerMessage, String... lore) {
+		ItemStack item = new ItemStack(material, amount);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(UtilsMessage.onChat(name));
+		meta.setLore(Collections.singletonList(UtilsMessage.onChat(Arrays.toString(lore))));
+		item.setItemMeta(meta);
+		item.setDurability((short) durability);
+
+		UtilsMessage.sendMessage(player, playerMessage);
+
+		return item;
+	}
+
 
 
 	/**
