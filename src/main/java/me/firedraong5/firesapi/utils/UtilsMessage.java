@@ -6,12 +6,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin;
 
 public class UtilsMessage implements Listener {
 
