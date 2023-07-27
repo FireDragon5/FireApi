@@ -2,8 +2,13 @@ package me.firedraong5.firesapi.menu;
 
 import me.firedraong5.firesapi.error.Valid;
 import me.firedraong5.firesapi.utils.UtilsMessage;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Menu {
 
@@ -15,6 +20,10 @@ public class Menu {
 	private Player viewer;
 
 	private boolean slotNumbersVisible;
+
+	private final boolean buttonsRegistered = false;
+
+	private final List<MenuButtons> registeredButtons = new ArrayList<>();
 
 	public Menu() {
 
@@ -103,10 +112,22 @@ public class Menu {
 		UtilsMessage.sendMessage(player, message);
 	}
 
+	private void registerButtons() {
+		registeredButtons.clear();
+
+		List<MenuButtons> buttons = getButtons();
+
+		if (buttons != null)
+			registeredButtons.addAll(buttons);
 
 
+	}
 
-//	Display the menu to the player
+	private List<MenuButtons> getButtons() {
+		return null;
+	}
+
+
 	/**
 	 * Displays the menu to the player
 	 * @param player The player to display the menu to
@@ -118,13 +139,29 @@ public class Menu {
 
 		viewer = player;
 
-		MenuCreator menuCreator = new MenuCreator(size, title);
-		
-		
-		
+		MenuCreator menuCreator = MenuCreator.createMenu(size, title);
+		slotNumbers(menuCreator);
 
 
+		menuCreator.displayMenu(player);
 	}
+
+	/**
+	 * Displays the menu to the player
+	 *
+	 * @param menu The menu to display
+	 */
+	private void slotNumbers(MenuCreator menu) {
+		if (slotNumbersVisible)
+			for (int i = 0; i < menu.getSize(); i++) {
+				ItemStack item = menu.getItem(i);
+
+				if (item == null)
+					menu.setItem(i, new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE,
+							1, (byte) 15), "&7" + i);
+			}
+	}
+
 
 	public void handleMenu(InventoryClickEvent event) {
 
