@@ -8,6 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import static org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin;
 
 public class UtilsMessage implements Listener {
@@ -80,15 +83,33 @@ public class UtilsMessage implements Listener {
 		player.sendMessage(onChat("&8[&e!&8] &7" + message));
 	}
 
-//	No Permission message
+
 	/**
 	 * This will send the player a message with the prefix
-	 * <br>&8[&c✖&8] &7You don't have the permission &c" + prems + " &7to do that!
+	 * <br>&8[&c✖&8] &7You don't have the permission &c" + permission + " &7to do that!
 	 * @param player Player to send the message
 	 * @param permission Permission that the player doesn't have
 	 */
-	public static void noPermissionMessage(Player player, String permission){
-		player.sendMessage(onChat("&8[&c✖&8] &7You don't have the permission &c" + permission + " &7to do that!"));
+	public static void noPermissionMessage(@Nonnull Player player, String permission) {
+		UtilsMessage.errorMessage(player, "&7You don't have the permission &c" + permission + " &7to do that!");
+	}
+
+	/**
+	 * This will send the player a custom message if they don't have permission
+	 *
+	 * @param player     - Player to send the message
+	 * @param permission - Permission that the player doesn't have
+	 *                   <br>Use %permission% in the message to include the permission
+	 * @param message    - Custom message
+	 */
+	public static void noPermissionMessage(@Nonnull Player player, @Nullable String permission, String message) {
+
+//		Include the permission in the message
+		if (permission != null) {
+			message = message.replace("%permission%", permission);
+		}
+
+		UtilsMessage.sendMessage(player, message);
 	}
 
 
