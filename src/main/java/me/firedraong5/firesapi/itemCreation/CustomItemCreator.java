@@ -131,8 +131,8 @@ public class CustomItemCreator {
 	 * @param playerMessage Message to send to the player
 	 * @return The item
 	 */
-	public static ItemStack createItemWithPlayerMessage(Player player,Material material, int amount, String name, int durability,
-									  String playerMessage, String... lore) {
+	public static ItemStack createItemWithPlayerMessage(Player player,Material material, int amount, String name,
+														int durability, String playerMessage, String... lore) {
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(UtilsMessage.onChat(name));
@@ -156,9 +156,5 @@ public class CustomItemCreator {
 	public static void addToInventory(Player player,ItemStack item) {
 		player.getInventory().addItem(item);
 	}
-
-
-
-
 
 }
