@@ -19,6 +19,5 @@ public final class FiresApi extends JavaPlugin {
     public void onDisable() {
 
 
-
     }
 }
