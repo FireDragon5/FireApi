@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
@@ -142,7 +143,11 @@ public class Menu implements Listener {
 
 		ItemStack item = new ItemStack(material);
 
-		item.getItemMeta().setDisplayName(UtilsMessage.onChat(name));
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(UtilsMessage.onChat(name));
+		item.setItemMeta(meta);
+
+
 		inventory.setItem(slot, item);
 	}
 
@@ -157,7 +162,10 @@ public class Menu implements Listener {
 
 		ItemStack item = new ItemStack(material);
 
-		item.getItemMeta().setDisplayName(UtilsMessage.onChat(name));
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(UtilsMessage.onChat(name));
+		item.setItemMeta(meta);
+
 //		item.getItemMeta().setLore(UtilsMessage.onChat(lore));
 		inventory.setItem(slot, item);
 	}
