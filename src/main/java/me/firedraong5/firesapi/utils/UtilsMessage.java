@@ -1,7 +1,9 @@
 package me.firedraong5.firesapi.utils;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -166,11 +168,24 @@ public class UtilsMessage implements Listener {
 	 */
 	public static void clickableMessage(Player player, String message, String command){
 
-		TextComponent messageComponent = new TextComponent(onChat(message));
-		messageComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+		player.sendMessage(String.valueOf(Component.text(onChat(message))
+				.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command)))
 
-		UtilsMessage.sendMessage(player, messageComponent.toLegacyText());
+		);
 
+	}
+
+
+	/**
+	 * Hover text to send to the player
+	 *
+	 * @param player    Player to send the message
+	 * @param message   Message to send
+	 * @param hoverText Hover text to send
+	 */
+	public static void hoverText(Player player, String message, String hoverText) {
+		player.sendMessage(String.valueOf(Component.text(onChat(message))
+				.hoverEvent(HoverEvent.showText(Component.text(onChat(hoverText))))));
 	}
 
 
