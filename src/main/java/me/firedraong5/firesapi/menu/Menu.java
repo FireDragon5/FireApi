@@ -10,6 +10,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+
 public class Menu implements Listener {
 
 	private final Player player;
@@ -99,12 +101,13 @@ public class Menu implements Listener {
 
 	/**
 	 * Set if the slot numbers are visible
+	 *
 	 * @param slotNumbersVisible Slot numbers visible
 	 * @return Menu
 	 */
-	public Menu setSlotNumbersVisible(boolean slotNumbersVisible) {
+	public boolean setSlotNumbersVisible(boolean slotNumbersVisible) {
 		this.slotNumbersVisible = slotNumbersVisible;
-		return this;
+		return slotNumbersVisible;
 	}
 
 	/**
@@ -118,22 +121,50 @@ public class Menu implements Listener {
 	/**
 	 * Set the inventory
 	 * @param slot Slot to set the item
-	 * @param item Item to set
+	 * @param material Material of the item
 	 */
-	public void setItem(int slot, ItemStack item) {
+	public void setItem(int slot, Material material) {
+
+		ItemStack item = new ItemStack(material);
+
+		inventory.setItem(slot, item);
+	}
+
+
+	/**
+	 * Set the inventory
+	 *
+	 * @param slot     Slot to set the item
+	 * @param material Material of the item
+	 * @param name     Name of the item
+	 */
+	public void setItem(int slot, Material material, String name) {
+
+		ItemStack item = new ItemStack(material);
+
+		item.getItemMeta().setDisplayName(UtilsMessage.onChat(name));
 		inventory.setItem(slot, item);
 	}
 
 	/**
 	 * Set the inventory
 	 * @param slot Slot to set the item
-	 * @param item Item to set
+	 * @param material Material of the item
 	 * @param name Name of the item
+	 * @param lore Lore of the item
 	 */
-	public void setItem(int slot, ItemStack item, String name) {
+	public void setItem(int slot, Material material, String name, ArrayList<String> lore) {
+
+		ItemStack item = new ItemStack(material);
+
 		item.getItemMeta().setDisplayName(UtilsMessage.onChat(name));
+//		item.getItemMeta().setLore(UtilsMessage.onChat(lore));
 		inventory.setItem(slot, item);
 	}
+
+
+
+
 
 	/**
 	 * Open the inventory

@@ -148,8 +148,7 @@ public class UtilsMessage implements Listener {
 	 * @param message Message to send
 	 */
 	public static void actionBarMessage(Player player, String message){
-		player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-				TextComponent.fromLegacyText(onChat(message)));
+		player.sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(onChat(message)));
 
 	}
 

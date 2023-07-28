@@ -1,4 +1,4 @@
 name: FiresApi
-version: '1.0.5'
+version: '1.1.1'
 main: me.firedraong5.firesapi.FiresApi
 api-version: '1.20'
