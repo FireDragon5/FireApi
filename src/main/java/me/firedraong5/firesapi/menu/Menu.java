@@ -1,171 +1,93 @@
 package me.firedraong5.firesapi.menu;
 
-import me.firedraong5.firesapi.error.Valid;
 import me.firedraong5.firesapi.utils.UtilsMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Menu implements Listener {
 
-public class Menu {
+	private final Player player;
+	private final Inventory inventory;
 
+	private String title = "&0Default Menu";
+	private int size = 9;
+	private boolean slotNumbersVisible = false;
 
-	private String title = "&bDefault Title";
-
-	private Integer size = 9 * 3;
-
-	private Player viewer;
-
-	private boolean slotNumbersVisible;
-
-	private final boolean buttonsRegistered = false;
-
-	private final List<MenuButtons> registeredButtons = new ArrayList<>();
-
-	public Menu() {
-
-	}
-
-
-//	Setters
-
-	/**
-	 * Sets the title of the menu
-	 * @param title The title of the menu
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	/**
-	 * Sets the size of the menu
-	 * @param size The size of the menu
-	 */
-	public void setSize(int size) {
+	public Menu(Player player, String name, int size) {
+		this.player = player;
+		this.title = UtilsMessage.onChat(name);
 		this.size = size;
+		this.inventory = Bukkit.createInventory(player, size, title);
 	}
 
-	/**
-	 * Sets the slot numbers visible
-	 */
-	public void setSlotNumbersVisible() {
-		this.slotNumbersVisible = true;
+	public Player getPlayer() {
+		return player;
 	}
 
-	/**
-	 * Sets the viewer of the menu
-	 * @param viewer The viewer of the menu
-	 */
-	public void setViewer(Player viewer) {
-		this.viewer = viewer;
-	}
-
-
-
-
-//	Getters
-
-	/**
-	 * Gets the title of the menu
-	 * @return The title of the menu
-	 */
-	public String getTitle() {
+	public String getName() {
 		return title;
 	}
 
-	/**
-	 * Gets the size of the menu
-	 * @return The size of the menu
-	 */
+	public Menu setName(String name) {
+		this.title = UtilsMessage.onChat(name);
+		return this;
+	}
+
 	public int getSize() {
 		return size;
 	}
 
-	/**
-	 * Gets if the slot numbers are visible
-	 * @return If the slot numbers are visible
-	 */
-	public boolean getSlotNumbersVisible() {
+	public Menu setSize(int size) {
+		this.size = size;
+		return this;
+	}
+
+	public boolean isSlotNumbersVisible() {
 		return slotNumbersVisible;
 	}
 
-	/**
-	 * Gets the viewer of the menu
-	 * @return The viewer of the menu
-	 */
-	public Player getViewer() {
-		return viewer;
+	public Menu setSlotNumbersVisible(boolean slotNumbersVisible) {
+		this.slotNumbersVisible = slotNumbersVisible;
+		return this;
 	}
 
-
-
-//	Menu Messages
-	/**
-	 * Sends a message to the player
-	 * @param player The player to send the message to
-	 * @param message The message to send
-	 */
-	public static void playerMessage(Player player, String message) {
-		UtilsMessage.sendMessage(player, message);
+	public ItemStack getItem(int slot) {
+		return inventory.getItem(slot);
 	}
 
-	private void registerButtons() {
-		registeredButtons.clear();
-
-		List<MenuButtons> buttons = getButtons();
-
-		if (buttons != null)
-			registeredButtons.addAll(buttons);
-
-
+	public void setItem(int slot, ItemStack item) {
+		inventory.setItem(slot, item);
 	}
 
-	private List<MenuButtons> getButtons() {
-		return null;
+	public void setItem(int slot, ItemStack item, String name) {
+		item.getItemMeta().setDisplayName(UtilsMessage.onChat(name));
+		inventory.setItem(slot, item);
 	}
 
-
-	/**
-	 * Displays the menu to the player
-	 * @param player The player to display the menu to
-	 */
-	public void displayMenu(Player player) {
-
-		Valid.checkNotNull(size, "Size cannot be null");
-		Valid.checkNotNull(title, "Title cannot be null");
-
-		viewer = player;
-
-		MenuCreator menuCreator = MenuCreator.createMenu(size, title);
-		slotNumbers(menuCreator);
-
-
-		menuCreator.displayMenu(player);
+	public void openMenu() {
+		player.openInventory(inventory);
 	}
 
-	/**
-	 * Displays the menu to the player
-	 *
-	 * @param menu The menu to display
-	 */
-	private void slotNumbers(MenuCreator menu) {
-		if (slotNumbersVisible)
-			for (int i = 0; i < menu.getSize(); i++) {
-				ItemStack item = menu.getItem(i);
-
-				if (item == null)
-					menu.setItem(i, new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE,
-							1, (byte) 15), "&7" + i);
+	private void slotNumbers() {
+		if (slotNumbersVisible) {
+			for (int i = 0; i < size; i++) {
+				ItemStack item = inventory.getItem(i);
+				if (item == null || item.getType() == Material.AIR) {
+					inventory.setItem(i, new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, (byte) 15));
+				}
 			}
+		}
 	}
 
-
-	public void handleMenu(InventoryClickEvent event) {
-
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent event) {
+		if (event.getInventory() == null || !event.getInventory().equals(inventory)) return;
 		event.setCancelled(true);
-
 	}
 }
