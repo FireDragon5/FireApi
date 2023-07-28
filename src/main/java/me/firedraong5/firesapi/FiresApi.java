@@ -1,7 +1,6 @@
 package me.firedraong5.firesapi;
 
 import me.firedraong5.firesapi.menu.Menu;
-import me.firedraong5.firesapi.menu.MenuListener;
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.plugin.java.JavaPlugin;
 
