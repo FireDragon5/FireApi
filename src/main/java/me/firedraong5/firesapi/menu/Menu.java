@@ -195,10 +195,12 @@ public class Menu {
 			for (int i = 0; i < size; i++) {
 				ItemStack item = inventory.getItem(i);
 				if (item == null || item.getType() == Material.AIR) {
-					inventory.setItem(i, new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, 1, (byte) 15));
+					inventory.setItem(i, new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE));
 				}
 			}
+
 		}
+
 	}
 
 //	Adding player head
