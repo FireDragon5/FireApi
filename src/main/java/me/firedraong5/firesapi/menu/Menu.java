@@ -4,17 +4,19 @@ import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
+
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
+
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Menu implements Listener {
+public class Menu {
 
 	private final Player player;
 	private final Inventory inventory;
@@ -161,7 +163,7 @@ public class Menu implements Listener {
 	 * @param name Name of the item
 	 * @param lore Lore of the item
 	 */
-	public void setItem(int slot, Material material, String name, ArrayList<String> lore) {
+	public void setItem(int slot, Material material, String name, List<String> lore) {
 
 		ItemStack item = new ItemStack(material);
 
@@ -169,7 +171,7 @@ public class Menu implements Listener {
 		meta.setDisplayName(UtilsMessage.onChat(name));
 		item.setItemMeta(meta);
 
-//		item.getItemMeta().setLore(UtilsMessage.onChat(lore));
+		item.getItemMeta().setLore(UtilsMessage.onChat(lore));
 		inventory.setItem(slot, item);
 	}
 
@@ -198,18 +200,67 @@ public class Menu implements Listener {
 		}
 	}
 
+//	Adding player head
 	/**
-	 * When the inventory is clicked
-	 * @param event InventoryClickEvent
+	 * Add a player head to the inventory
+	 * @param player Player to get the head
+	 * @param name Name of the head (null = player name)
+	 * @param slot Slot to set the head
 	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onInventoryClick(InventoryClickEvent event) {
+	public void addPlayerHead(Player player, @Nullable String name, int slot) {
 
-		if (!event.getInventory().equals(inventory)) {
-			event.setCancelled(true);
+		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+		SkullMeta meta = (SkullMeta) item.getItemMeta();
+
+		if (name == null) {
+			name = player.getName();
+		}
+
+		meta.setDisplayName(UtilsMessage.onChat(name));
+
+		meta.setOwningPlayer(player);
+
+		item.setItemMeta(meta);
+
+		inventory.setItem(slot, item);
+
+	}
+
+//	Get all the players heads in the server
+
+	/**
+	 * Get all the players heads in the server
+	 *
+	 * @param name Name of the head (null = player name)
+	 * @param lore Lore of the head (null = no lore)
+	 */
+	public void getAllPlayerHeads(@Nullable String name, @Nullable List<String> lore) {
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+
+			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+			SkullMeta meta = (SkullMeta) item.getItemMeta();
+
+
+			if (name != null) {
+				meta.setDisplayName(UtilsMessage.onChat(name));
+			} else {
+				meta.setDisplayName(UtilsMessage.onChat(player.getName()));
+			}
+
+			if (lore != null) {
+				meta.setLore(UtilsMessage.onChat(lore));
+			}
+
+			meta.setOwningPlayer(player);
+
+			item.setItemMeta(meta);
+
+
 		}
 
 
 	}
+
 
 }
