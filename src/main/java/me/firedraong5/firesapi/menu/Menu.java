@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -18,7 +19,7 @@ public class Menu implements Listener {
 	private final Player player;
 	private final Inventory inventory;
 
-	private String title = "&0Default Menu";
+	private String title;
 	private int size = 9;
 	private boolean slotNumbersVisible = false;
 
@@ -32,10 +33,10 @@ public class Menu implements Listener {
 	 */
 	public Menu(Player player, String name, int size) {
 		this.player = player;
-		this.title = UtilsMessage.onChat(name);
+		this.title = name;
 		this.size = size;
 
-		this.inventory = Bukkit.createInventory(player, size, title);
+		this.inventory = Bukkit.createInventory(player, size, UtilsMessage.onChat(title));
 
 	}
 
@@ -199,9 +200,14 @@ public class Menu implements Listener {
 	 * When the inventory is clicked
 	 * @param event InventoryClickEvent
 	 */
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getInventory() == null || !event.getInventory().equals(inventory)) return;
-		event.setCancelled(true);
+
+
+		if (!event.getInventory().equals(inventory)) {
+		}
+
+
 	}
+
 }
