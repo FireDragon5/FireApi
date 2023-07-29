@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UtilsMessage implements Listener {
@@ -23,6 +25,18 @@ public class UtilsMessage implements Listener {
 	 */
 	public static String onChat(String s){
 		return ChatColor.translateAlternateColorCodes('&', s);
+	}
+
+	/**
+	 * @param s String to translate
+	 * @return String translated
+	 */
+	public static List<String> onChat(List<String> s) {
+		List<String> list = new ArrayList<>();
+		for (String string : s) {
+			list.add(onChat(string));
+		}
+		return list;
 	}
 
 
