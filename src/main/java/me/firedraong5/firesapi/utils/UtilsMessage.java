@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ *
+ */
 public class UtilsMessage implements Listener {
 
 
@@ -27,9 +30,10 @@ public class UtilsMessage implements Listener {
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 
+
 	/**
-	 * @param s String to translate
-	 * @return String translated
+	 * @param s List of strings to translate
+	 * @return List of strings translated
 	 */
 	public static List<String> onChat(List<String> s) {
 		List<String> list = new ArrayList<>();
