@@ -11,7 +11,6 @@ public final class FiresApi extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new UtilsMessage(), this);
 
-
     }
 
     @Override
