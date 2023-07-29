@@ -1,11 +1,11 @@
 package me.firedraong5.firesapi.menu;
 
 import me.firedraong5.firesapi.utils.UtilsMessage;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import org.bukkit.event.Listener;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Menu {
@@ -38,7 +37,7 @@ public class Menu {
 		this.title = name;
 		this.size = size;
 
-		this.inventory = Bukkit.createInventory(player, size, UtilsMessage.onChat(title));
+		this.inventory = Bukkit.createInventory(player, size, Component.text(UtilsMessage.onChat(name)));
 
 		slotNumbers();
 
