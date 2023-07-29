@@ -8,6 +8,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,7 +28,8 @@ public class UtilsMessage implements Listener {
 	 * @param s String to translate
 	 * @return String translated
 	 */
-	public static String onChat(String s){
+	@Contract("_ -> new")
+	public static @NotNull String onChat(String s) {
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 
@@ -35,7 +38,7 @@ public class UtilsMessage implements Listener {
 	 * @param s List of strings to translate
 	 * @return List of strings translated
 	 */
-	public static List<String> onChat(List<String> s) {
+	public static @NotNull List<String> onChat(List<String> s) {
 		List<String> list = new ArrayList<>();
 		for (String string : s) {
 			list.add(onChat(string));
