@@ -24,7 +24,6 @@ public class Menu {
 
 	private String title;
 	private int size = 9;
-	private boolean slotNumbersVisible = false;
 
 
 	/**
@@ -41,7 +40,6 @@ public class Menu {
 
 		this.inventory = Bukkit.createInventory(player, size, Component.text(UtilsMessage.onChat(name)));
 
-		slotNumbers();
 
 	}
 
@@ -99,24 +97,6 @@ public class Menu {
 		return this;
 	}
 
-	/**
-	 * Get if the slot numbers are visible
-	 * @return Slot numbers visible
-	 */
-	public boolean isSlotNumbersVisible() {
-		return slotNumbersVisible;
-	}
-
-	/**
-	 * Set if the slot numbers are visible
-	 *
-	 * @param slotNumbersVisible Slot numbers visible
-	 * @return Menu
-	 */
-	public boolean setSlotNumbersVisible(boolean slotNumbersVisible) {
-		this.slotNumbersVisible = slotNumbersVisible;
-		return slotNumbersVisible;
-	}
 
 	/**
 	 * Get the inventory
@@ -191,9 +171,7 @@ public class Menu {
 	/**
 	 * When slotNumbers are turn it will show the slot numbers
 	 */
-	private void slotNumbers() {
-		if (slotNumbersVisible) {
-
+	public void slotNumbers() {
 			ItemStack item = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
 			ItemMeta meta = item.getItemMeta();
 
@@ -206,7 +184,6 @@ public class Menu {
 					inventory.setItem(i, item);
 				}
 			}
-		}
 
 	}
 
