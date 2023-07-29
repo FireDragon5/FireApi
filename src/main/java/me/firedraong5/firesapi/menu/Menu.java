@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -192,18 +193,23 @@ public class Menu {
 	 */
 	private void slotNumbers() {
 		if (slotNumbersVisible) {
+
+			ItemStack item = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
+			ItemMeta meta = item.getItemMeta();
+
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
 			for (int i = 0; i < size; i++) {
-				ItemStack item = inventory.getItem(i);
-				if (item == null || item.getType() == Material.AIR) {
-					inventory.setItem(i, new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE));
+				meta.setDisplayName(UtilsMessage.onChat("&e" + i));
+				item.setItemMeta(meta);
+				if (item.getType() == Material.AIR || inventory.getItem(i) == null) {
+					inventory.setItem(i, item);
 				}
 			}
-
 		}
 
 	}
 
-//	Adding player head
 	/**
 	 * Add a player head to the inventory
 	 * @param player Player to get the head
