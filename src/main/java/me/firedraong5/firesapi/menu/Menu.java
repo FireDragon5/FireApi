@@ -36,6 +36,8 @@ public class Menu implements Listener {
 		this.title = name;
 		this.size = size;
 
+		slotNumbers();
+
 		this.inventory = Bukkit.createInventory(player, size, UtilsMessage.onChat(title));
 
 	}
@@ -203,8 +205,8 @@ public class Menu implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onInventoryClick(InventoryClickEvent event) {
 
-
 		if (!event.getInventory().equals(inventory)) {
+			event.setCancelled(true);
 		}
 
 
