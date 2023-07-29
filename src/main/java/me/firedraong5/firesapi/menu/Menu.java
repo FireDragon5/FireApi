@@ -36,9 +36,9 @@ public class Menu implements Listener {
 		this.title = name;
 		this.size = size;
 
-		slotNumbers();
-
 		this.inventory = Bukkit.createInventory(player, size, UtilsMessage.onChat(title));
+
+		slotNumbers();
 
 	}
 
