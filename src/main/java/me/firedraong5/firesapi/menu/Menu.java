@@ -204,6 +204,7 @@ public class Menu {
 	 * Add a player head to the inventory
 	 * @param player Player to get the head
 	 * @param name Name of the head (null = player name)
+	 *           <br> - When %player% is in the name it will replace it with the player name
 	 * @param slot Slot to set the head
 	 */
 	public void addPlayerHead(Player player, @Nullable String name, int slot) {
@@ -211,11 +212,15 @@ public class Menu {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
 
-		if (name == null) {
-			name = player.getName();
-		}
+		if (name == null)
+			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
 
-		meta.setDisplayName(UtilsMessage.onChat(name));
+		else if (name.contains("%player%"))
+			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
+
+		else
+			meta.displayName(Component.text(UtilsMessage.onChat(name)));
+
 
 		meta.setOwningPlayer(player);
 
@@ -225,15 +230,48 @@ public class Menu {
 
 	}
 
-//	Get all the players heads in the server
+	/**
+	 * Add a player head to the inventory
+	 *
+	 * @param player Player to get the head
+	 * @param name   Name of the head (null = player name)
+	 *               <br> - When %player% is in the name it will replace it with the player name
+	 * @param lore   Lore of the head
+	 * @param slot   Slot to set the head
+	 */
+	public void addPlayerHead(Player player, @Nullable String name, int slot, List<String> lore) {
+
+		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+		SkullMeta meta = (SkullMeta) item.getItemMeta();
+
+		if (name == null)
+			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
+
+		else if (name.contains("%player%"))
+			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
+
+		else
+			meta.displayName(Component.text(UtilsMessage.onChat(name)));
+
+
+		meta.setOwningPlayer(player);
+
+		meta.setLore(UtilsMessage.onChat(lore));
+
+		item.setItemMeta(meta);
+
+		inventory.setItem(slot, item);
+
+	}
+
 
 	/**
-	 * Get all the players heads in the server
+	 * Get all the online players heads in the server
 	 *
 	 * @param name Name of the head (null = player name)
 	 * @param lore Lore of the head (null = no lore)
 	 */
-	public void getAllPlayerHeads(@Nullable String name, @Nullable List<String> lore) {
+	public void getAllPlayerHeads(@Nullable String name, List<String> lore) {
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
 
@@ -241,15 +279,17 @@ public class Menu {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 
 
-			if (name != null) {
-				meta.setDisplayName(UtilsMessage.onChat(name));
-			} else {
-				meta.setDisplayName(UtilsMessage.onChat(player.getName()));
-			}
+			if (name == null)
+				meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
 
-			if (lore != null) {
-				meta.setLore(UtilsMessage.onChat(lore));
-			}
+			else if (name.contains("%player%"))
+				meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
+
+			else
+				meta.displayName(Component.text(UtilsMessage.onChat(name)));
+
+
+			meta.setLore(UtilsMessage.onChat(lore));
 
 			meta.setOwningPlayer(player);
 
@@ -262,4 +302,38 @@ public class Menu {
 	}
 
 
-}
+	/**
+	 * Get all the online players heads in the server
+	 *
+	 * @param name Name of the head (null = player name)
+	 */
+	public void getAllPlayerHeads(@Nullable String name) {
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+
+			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+			SkullMeta meta = (SkullMeta) item.getItemMeta();
+
+
+			if (name == null)
+				meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
+
+			else if (name.contains("%player%"))
+				meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
+
+			else
+				meta.displayName(Component.text(UtilsMessage.onChat(name)));
+
+
+			meta.setOwningPlayer(player);
+
+			item.setItemMeta(meta);
+
+
+		}
+	}
+
+
+
+
+	}
