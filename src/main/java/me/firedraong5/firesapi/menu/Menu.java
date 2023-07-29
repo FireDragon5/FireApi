@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -47,6 +48,7 @@ public class Menu {
 	/**
 	 * Create a new menu
 	 */
+
 	public Menu() {
 		this.player = null;
 		inventory = null;
@@ -186,7 +188,7 @@ public class Menu {
 	}
 
 	/**
-	 * When slotNumbers are turn turn it will show the slot numbers
+	 * When slotNumbers are turn it will show the slot numbers
 	 */
 	private void slotNumbers() {
 		if (slotNumbersVisible) {
@@ -294,6 +296,8 @@ public class Menu {
 			meta.setOwningPlayer(player);
 
 			item.setItemMeta(meta);
+
+			inventory.addItem(item);
 
 
 		}
