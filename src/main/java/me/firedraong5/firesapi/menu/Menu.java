@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -186,6 +187,24 @@ public class Menu {
 
 	}
 
+	//	Make the rest of the gui look like glass
+	public void glass() {
+		ItemStack item = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+		ItemMeta meta = item.getItemMeta();
+
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+		for (int i = 0; i < size; i++) {
+			meta.setDisplayName(UtilsMessage.onChat("&e"));
+			item.setItemMeta(meta);
+			if (item.getType() == Material.AIR || inventory.getItem(i) == null) {
+				inventory.setItem(i, item);
+			}
+		}
+
+	}
+
+
 	/**
 	 * Add a player head to the inventory
 	 * @param player Player to get the head
@@ -225,7 +244,7 @@ public class Menu {
 	 * @param lore   Lore of the head
 	 * @param slot   Slot to set the head
 	 */
-	public void addPlayerHead(Player player, @Nullable String name, int slot, List<String> lore) {
+	public void addPlayerHead(Player player, @Nullable String name, int slot, @NotNull List<String> lore) {
 
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
@@ -257,12 +276,10 @@ public class Menu {
 	 * @param name Name of the head (null = player name)
 	 * @param lore Lore of the head (null = no lore)
 	 */
-	public void getAllPlayerHeads(Player player, @Nullable String name, List<String> lore) {
-
+	public void getAllPlayerHeads(Player player, @Nullable String name, @NotNull List<String> lore) {
 
 			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
-
 
 			if (name == null)
 				meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
