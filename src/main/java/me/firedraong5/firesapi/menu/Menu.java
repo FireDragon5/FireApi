@@ -4,8 +4,6 @@ import me.firedraong5.firesapi.utils.UtilsMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 
@@ -14,10 +12,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.util.List;
 
 public class Menu {
@@ -257,13 +253,12 @@ public class Menu {
 
 	/**
 	 * Get all the online players heads in the server
-	 *
+	 * @param player Player to get the head
 	 * @param name Name of the head (null = player name)
 	 * @param lore Lore of the head (null = no lore)
 	 */
-	public void getAllPlayerHeads(@Nullable String name, List<String> lore) {
+	public void getAllPlayerHeads(Player player, @Nullable String name, List<String> lore) {
 
-		for (Player player : Bukkit.getOnlinePlayers()) {
 
 			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
@@ -288,20 +283,16 @@ public class Menu {
 			inventory.addItem(item);
 
 
-		}
-
-
 	}
 
 
 	/**
 	 * Get all the online players heads in the server
-	 *
+	 *    @param player Player to get the head
 	 * @param name Name of the head (null = player name)
 	 */
-	public void getAllPlayerHeads(@Nullable String name) {
+	public void getAllPlayerHeads(Player player, @Nullable String name) {
 
-		for (Player player : Bukkit.getOnlinePlayers()) {
 
 			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
@@ -321,8 +312,8 @@ public class Menu {
 
 			item.setItemMeta(meta);
 
+		inventory.addItem(item);
 
-		}
 	}
 
 
