@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
+
 
 public class Menu {
 
@@ -187,9 +189,19 @@ public class Menu {
 
 	}
 
-	//	Make the rest of the gui look like glass
-	public void glass() {
-		ItemStack item = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+	/**
+	 * Make the rest of the gui look like glass
+	 *
+	 * @param material Material of the glass
+	 * - If null it will be black stained-glass
+	 */
+	public void glass(@Nullable Material material) {
+
+		if (material == null) {
+			material = Material.BLACK_STAINED_GLASS_PANE;
+		}
+
+		ItemStack item = new ItemStack(material);
 		ItemMeta meta = item.getItemMeta();
 
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -203,6 +215,67 @@ public class Menu {
 		}
 
 	}
+
+
+	/**
+	 * Place the glass in a border of the gui
+	 *
+	 * @param material Material of the glass
+	 * - If null it will be black stained-glass
+	 */
+	public void borderGlass(@Nullable Material material) {
+
+		if (material == null) {
+			material = Material.BLACK_STAINED_GLASS_PANE;
+		}
+
+		ItemStack item = new ItemStack(material);
+		ItemMeta meta = item.getItemMeta();
+
+
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+		for (int i = 0; i < size; i++) {
+			if (i < 9 || i > size - 9 || i % 9 == 0 || i % 9 == 8) {
+				meta.setDisplayName(UtilsMessage.onChat("&e"));
+				item.setItemMeta(meta);
+				if (item.getType() == Material.AIR || inventory.getItem(i) == null) {
+					inventory.setItem(i, item);
+				}
+			}
+		}
+
+	}
+
+
+//	Methods where the user can place the glass pane
+
+	/**
+	 * Make the rest of the gui look like glass
+	 *
+	 * @param material Material of the glass pane
+	 * @param name Name of the glass pane
+	 * @param slotNumbers Show the slot numbers
+	 */
+	public void glass(@NotNull Material material, @Nullable String name, @NotNull List<Integer> slotNumbers) {
+
+		ItemStack item = new ItemStack(material);
+		ItemMeta meta = item.getItemMeta();
+
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+		for (Integer slotNumber : slotNumbers) {
+
+			meta.setDisplayName(UtilsMessage.onChat(Objects.requireNonNullElse(name, "&e")));
+			item.setItemMeta(meta);
+			if (item.getType() == Material.AIR || inventory.getItem(slotNumber) == null) {
+				inventory.setItem(slotNumber, item);
+			}
+		}
+
+
+	}
+
 
 
 	/**
