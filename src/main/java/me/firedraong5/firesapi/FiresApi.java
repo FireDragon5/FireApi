@@ -15,8 +15,6 @@ public final class FiresApi extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new UtilsMessage(), this);
 
-        FireCommand fireCommand = new FireCommand("test");
-        Objects.requireNonNull(getCommand("test")).setExecutor((CommandExecutor) fireCommand);
 
     }
 
