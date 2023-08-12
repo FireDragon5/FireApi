@@ -6,6 +6,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.Contract;
@@ -17,14 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- *
- */
+
 public class UtilsMessage implements Listener {
 
 
 	/**
-	 *
+	 * Send a message to the player
 	 * @param s String to translate
 	 * @return String translated
 	 */
@@ -35,6 +34,7 @@ public class UtilsMessage implements Listener {
 
 
 	/**
+	 * Translate a list of strings
 	 * @param s List of strings to translate
 	 * @return List of strings translated
 	 */
@@ -62,6 +62,18 @@ public class UtilsMessage implements Listener {
 	public static void sendMessage(Player player, String message) {
 		player.sendMessage(onChat(message));
 	}
+
+
+	/**
+	 * Send a message to the command sender
+	 *
+	 * @param sender CommandSender to send the message
+	 * @param message Message to send
+	 */
+	public static void sendMessage(CommandSender sender, String message) {
+		sender.sendMessage(onChat(message));
+	}
+
 
 	/**
 	 *

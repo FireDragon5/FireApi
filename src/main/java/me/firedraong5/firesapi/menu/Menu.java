@@ -153,9 +153,12 @@ public class Menu {
 
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(UtilsMessage.onChat(name));
+
+		meta.setLore(UtilsMessage.onChat(lore));
+
 		item.setItemMeta(meta);
 
-		item.getItemMeta().setLore(UtilsMessage.onChat(lore));
+
 		inventory.setItem(slot, item);
 	}
 
