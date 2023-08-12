@@ -378,6 +378,39 @@ public class Menu {
 
 	}
 
+	/**
+	 * Get all the online players heads in the server
+	 *
+	 * @param player Player to get the head
+	 * @param name Name of the head (null = player name)
+	 * @param lore Lore of the head (null = no lore)
+	 * @param slot Slot to set the head
+	 */
+
+	public void getAllPlayerHeads(Player player, @Nullable String name, @NotNull List<String> lore, int slot) {
+
+		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+		SkullMeta meta = (SkullMeta) item.getItemMeta();
+
+		if (name == null)
+			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
+
+		else if (name.contains("%player%"))
+			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
+
+		else
+			meta.displayName(Component.text(UtilsMessage.onChat(name)));
+
+		meta.setLore(UtilsMessage.onChat(lore));
+
+		meta.setOwningPlayer(player);
+
+		item.setItemMeta(meta);
+
+		inventory.setItem(slot, item);
+
+	}
+
 
 	/**
 	 * Get all the online players heads in the server
