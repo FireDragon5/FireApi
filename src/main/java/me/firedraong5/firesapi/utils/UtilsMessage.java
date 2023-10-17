@@ -64,6 +64,8 @@ public class UtilsMessage implements Listener {
 	}
 
 
+
+
 	/**
 	 * Send a message to the command sender
 	 *
@@ -105,6 +107,8 @@ public class UtilsMessage implements Listener {
 	public static void errorMessage(Player player, String message) {
 		player.sendMessage(onChat("&8[&c✖&8] &7" + message));
 	}
+
+
 
 
 	/**
