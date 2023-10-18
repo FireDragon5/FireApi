@@ -45,12 +45,20 @@ public abstract class FireCommand extends BukkitCommand {
 	@Override
 	public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
 
-		onCommand(sender, args);
+		this.sender = sender;
 
-		return false;
+		if (this.getPermission() != null && !sender.hasPermission(this.getPermission())) {
+			UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
+			return true;
+		}
+
+		this.execute(sender, args);
+		return true;
+
+
 	}
 
-	public abstract void onCommand(CommandSender sender, String[] args);
+	public abstract void execute(CommandSender sender, String[] args);
 
 	@Override
 	public @NotNull List<String> tabComplete(@NotNull CommandSender sender,
@@ -73,13 +81,8 @@ public abstract class FireCommand extends BukkitCommand {
 
 	protected final void checkConsole() throws CommandException {
 		if (!this.isPlayer()) {
-			throw new CommandException(UtilsMessage.onChat("&cThis command can only be executed by a player"));
+			throw new CommandException(ChatColor.RED + "You must be a player to use this command!");
 		}
-	}
-
-	// set Permission message
-	public void setPermMessage(String message) {
-		this.setPermissionMessage(message);
 	}
 
 
