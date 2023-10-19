@@ -9,11 +9,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CustomItemCreator {
+
+public abstract class CustomItemCreator {
 
 //	Get the item name
 
-	public static @NotNull String getItemName(@NotNull ItemStack item) {
+	public abstract String getItemName();
+
+	public @NotNull String getItemName(@NotNull ItemStack item) {
 		return item.getItemMeta().getDisplayName();
 	}
 
