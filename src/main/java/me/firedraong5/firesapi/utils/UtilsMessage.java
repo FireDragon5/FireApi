@@ -62,7 +62,17 @@ public class UtilsMessage implements Listener {
 		player.sendMessage(onChat(message));
 	}
 
+//	info message
 
+	/**
+	 * This will send the player a message with the prefix &8[&b?&8]
+	 *
+	 * @param player Player to send the message
+	 * @param message Message to send
+	 */
+	public static void infoMessage(Player player, String message) {
+		player.sendMessage(onChat("&8[&b?&8] &7" + message));
+	}
 
 
 	/**
