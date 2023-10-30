@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class Menu {
+public class FireMenu {
 
 	private final Player player;
 	private final Inventory inventory;
@@ -35,7 +35,7 @@ public class Menu {
 	 * @param name   Name of the menu
 	 * @param size   Size of the menu
 	 */
-	public Menu(Player player, String name, int size) {
+	public FireMenu(Player player, String name, int size) {
 		this.player = player;
 		this.title = name;
 		this.size = size;
@@ -50,7 +50,7 @@ public class Menu {
 	 * Create a new menu
 	 */
 
-	public Menu() {
+	public FireMenu() {
 		this.player = null;
 		inventory = null;
 	}
@@ -76,7 +76,7 @@ public class Menu {
 	 * @param name Name of the menu
 	 * @return Menu
 	 */
-	public Menu setName(String name) {
+	public FireMenu setName(String name) {
 		this.title = UtilsMessage.onChat(name);
 		return this;
 	}
@@ -94,7 +94,7 @@ public class Menu {
 	 * @param size Size of the menu
 	 * @return Menu
 	 */
-	public Menu setSize(int size) {
+	public FireMenu setSize(int size) {
 		this.size = size;
 		return this;
 	}
