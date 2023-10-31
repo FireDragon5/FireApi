@@ -7,7 +7,7 @@ import java.io.File;
 public abstract class FireManager {
 
 
-	//	Load
+	//	Loads
 	public abstract void load();
 
 	//	Save
