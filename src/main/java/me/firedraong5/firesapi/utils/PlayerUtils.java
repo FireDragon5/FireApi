@@ -32,4 +32,14 @@ public class PlayerUtils {
 	}
 
 
+	//	has permission if not send a no permission message
+	public static boolean hasPermission(Player player, String permission) {
+		if (!player.hasPermission(permission)) {
+			UtilsMessage.errorMessage(player, "&7You don't have the permission to do that!");
+			return false;
+		}
+		return true;
+	}
+
+
 }
