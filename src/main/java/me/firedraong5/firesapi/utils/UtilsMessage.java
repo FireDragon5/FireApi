@@ -74,6 +74,11 @@ public class UtilsMessage implements Listener {
 		player.sendMessage(onChat("&8[&b?&8] &7" + message));
 	}
 
+	//	Message list send to the player
+	public static void sendMessage(Player player, List<String> message) {
+		UtilsMessage.sendMessage(player, message);
+	}
+
 
 	/**
 	 * Send a message to the command sender
