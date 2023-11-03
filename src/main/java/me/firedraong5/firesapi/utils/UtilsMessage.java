@@ -5,6 +5,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,12 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class UtilsMessage implements Listener {
 
+	static Map<UUID, List<String>> delayMessage = new HashMap<>();
 
 	/**
 	 * Send a message to the player
@@ -77,6 +78,37 @@ public class UtilsMessage implements Listener {
 	//	Message list send to the player
 	public static void sendMessage(Player player, List<String> message) {
 		UtilsMessage.sendMessage(player, message);
+	}
+
+	//	Offline player message this message will send to the player as soon as they join the server
+	public static void offlineMessage(Player player, String message) {
+		if (player.isOnline()) {
+			player.sendMessage(onChat(message));
+		} else {
+			if (delayMessage.containsKey(player.getUniqueId())) {
+				delayMessage.get(player.getUniqueId()).add(message);
+			} else {
+				List<String> list = new ArrayList<>();
+				list.add(message);
+				delayMessage.put(player.getUniqueId(), list);
+			}
+		}
+
+	}
+
+	//	Check pending messages
+	public static void checkPendingMessages() {
+		for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+			UUID playerId = onlinePlayer.getUniqueId();
+			if (delayMessage.containsKey(playerId)) {
+				List<String> messages = delayMessage.get(playerId);
+				for (String message : messages) {
+					UtilsMessage.sendMessage(onlinePlayer, message);
+				}
+				// Clear the messages for the player
+				delayMessage.remove(playerId);
+			}
+		}
 	}
 
 
