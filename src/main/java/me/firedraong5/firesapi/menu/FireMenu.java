@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +25,7 @@ public abstract class FireMenu {
 	private final Player player;
 	private final Inventory inventory;
 
-	private String title;
+	private String title = "Menu";
 	private int size = 9;
 
 
@@ -174,6 +175,87 @@ public abstract class FireMenu {
 		inventory.setItem(slot, item);
 	}
 
+	/**
+	 * Set the inventory
+	 *
+	 * @param slot Slot to set the item
+	 * @param material Material of the item
+	 * @param name Name of the item
+	 * @param lore Lore of the item
+	 * @param amount Amount of the item
+	 */
+	public void setItem(int slot, Material material, String name, List<String> lore, int amount) {
+
+		ItemStack item = new ItemStack(material, amount);
+
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(UtilsMessage.onChat(name));
+
+		meta.setLore(UtilsMessage.onChat(lore));
+
+		item.setItemMeta(meta);
+	}
+
+	//	Set items on certain pages
+	public void setItem(int slot, Material material, String name, List<String> lore, int amount, int page) {
+
+		ItemStack item = new ItemStack(material, amount);
+
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(UtilsMessage.onChat(name));
+
+		meta.setLore(UtilsMessage.onChat(lore));
+
+		item.setItemMeta(meta);
+
+		if (isPageValid(List.of(inventory.getContents()), page, size)) {
+			inventory.setItem(slot, item);
+		}
+	}
+
+	//	Set the items that switch between the pages
+	public void setItemMenuRightSwitcher(int slot, Material material, String name, List<String> lore, int amount, int page, int nextPage) {
+
+		ItemStack item = new ItemStack(material, amount);
+
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(UtilsMessage.onChat(name));
+
+		meta.setLore(UtilsMessage.onChat(lore));
+
+		item.setItemMeta(meta);
+
+		if (isPageValid(List.of(inventory.getContents()), page + 1, size)) {
+			inventory.setItem(slot, item);
+		}
+
+		if (isPageValid(List.of(inventory.getContents()), nextPage, size)) {
+			inventory.setItem(slot, item);
+		}
+
+	}
+
+	//	Left switcher
+	public void setItemMenuLeftSwitcher(int slot, Material material, String name, List<String> lore, int amount, int page, int previousPage) {
+
+		ItemStack item = new ItemStack(material, amount);
+
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(UtilsMessage.onChat(name));
+
+		meta.setLore(UtilsMessage.onChat(lore));
+
+		item.setItemMeta(meta);
+
+		if (isPageValid(List.of(inventory.getContents()), page - 1, size)) {
+			inventory.setItem(slot, item);
+		}
+
+		if (isPageValid(List.of(inventory.getContents()), previousPage, size)) {
+			inventory.setItem(slot, item);
+		}
+
+	}
 
 
 
@@ -453,6 +535,38 @@ public abstract class FireMenu {
 		inventory.addItem(item);
 
 	}
+
+
+	//	Page
+	public static boolean isPageValid(List<ItemStack> items, int page, int size) {
+
+		if (page <= 0) {
+			return false;
+		}
+
+		int upperLimit = page * size;
+		int lowerLimit = upperLimit - size;
+
+		return items.size() > lowerLimit;
+	}
+
+
+	public static List<ItemStack> getPageItems(List<ItemStack> items, int page, int size) {
+
+		int upperLimit = page * size;
+		int lowerLimit = upperLimit - size;
+
+		List<ItemStack> newItems = new ArrayList<>();
+		for (int i = lowerLimit; i < upperLimit; i++) {
+			if (items.size() > i) {
+				newItems.add(items.get(i));
+			}
+		}
+
+		return newItems;
+	}
+
+
 
 
 }
