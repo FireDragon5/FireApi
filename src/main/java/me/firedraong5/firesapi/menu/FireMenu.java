@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public abstract class FireMenu {
+public class FireMenu {
 
 	private final Player player;
 	private final Inventory inventory;
@@ -50,13 +50,6 @@ public abstract class FireMenu {
 	private String getClassName() {
 		return this.getClass().getSimpleName();
 	}
-
-//	Create abstract constructor method
-
-	public abstract void setupMenu();
-
-	public abstract void openMenu(Player player);
-
 
 
 	/**
