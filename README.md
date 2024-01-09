@@ -1,4 +1,4 @@
-Personal API I am making to improve my spigot development.
+Custom API I am making to streamline my Spigot development workflow.
 
 [![](https://jitpack.io/v/FireDragon5/FireApi.svg)](https://jitpack.io/#FireDragon5/FireApi)
 
