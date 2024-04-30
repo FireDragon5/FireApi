@@ -96,6 +96,12 @@ public abstract class FireCommand extends BukkitCommand {
 											 @NotNull String alias, @NotNull String[] args)
 			throws IllegalArgumentException {
 
+		if (args.length == 1) {
+			return this.methods.keySet().stream()
+					.filter(methodName -> methodName.startsWith(args[0]))
+					.toList();
+		}
+
 		return onTabComplete(sender, args);
 	}
 
