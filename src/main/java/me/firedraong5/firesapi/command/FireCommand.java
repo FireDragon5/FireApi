@@ -137,5 +137,12 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 	}
 
+	//	Method to print all the methods found in the class
+	public void printMethods() {
+		this.methods.forEach((key, value) -> {
+			System.out.println(key + " : " + value.getName());
+		});
+	}
+
 
 }
