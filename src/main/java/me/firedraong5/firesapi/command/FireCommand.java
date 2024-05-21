@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public abstract class FireCommand extends BukkitCommand {
@@ -74,7 +75,7 @@ public abstract class FireCommand extends BukkitCommand {
 			UtilsMessage.sendMessage(sender, ChatColor.RED + "Usage: /" + this.getName() +
 					" <" + this.methods.keySet().stream()
 					.filter(methodName -> !methodName.isEmpty())
-					.reduce((a, b) -> a + "|" + b).orElse("") + ">");
+					.collect(Collectors.joining("|")) + ">");
 			return true;
 		}
 
@@ -98,8 +99,8 @@ public abstract class FireCommand extends BukkitCommand {
 
 		if (args.length == 1) {
 			return this.methods.keySet().stream()
-					.filter(methodName -> methodName.startsWith(args[0]))
-					.toList();
+					.filter(methodName -> !methodName.isEmpty())
+					.collect(Collectors.toList());
 		}
 
 		return onTabComplete(sender, args);
