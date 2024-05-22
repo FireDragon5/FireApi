@@ -63,6 +63,7 @@ public abstract class FireCommand extends BukkitCommand {
 		String param = args.length > 0 ? args[0] : "";
 		Method method = this.methods.get(param.toLowerCase());
 
+//		Checking if the method requires a player and the sender is not a player
 		if (method != null) {
 			if (method.isAnnotationPresent(Parameter.class)) {
 				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
