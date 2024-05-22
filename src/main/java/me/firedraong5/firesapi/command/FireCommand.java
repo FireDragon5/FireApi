@@ -29,7 +29,7 @@ public abstract class FireCommand extends BukkitCommand {
 
 	private CommandSender sender;
 
-	private final Map<String, Method> methods = new HashMap<>();
+	public final Map<String, Method> methods = new HashMap<>();
 
 	public FireCommand(@NotNull String command,
 					   @NotNull String[] aliases, @NotNull String description, String permission) {
@@ -37,6 +37,11 @@ public abstract class FireCommand extends BukkitCommand {
 
 		this.setAliases(Arrays.asList(aliases));
 		this.setDescription(description);
+
+//		If the String permission = "default" then the permission will be null
+		if (permission.equals("default")) {
+			permission = null;
+		}
 		this.setPermission(permission);
 
 		this.findMethods();
@@ -46,21 +51,16 @@ public abstract class FireCommand extends BukkitCommand {
 			field.setAccessible(true);
 			CommandMap commandMap = (CommandMap) field.get(Bukkit.getServer());
 			commandMap.register(command, this);
-
-
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 
-	}
 
+	}
 	@Override
 	public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
-
 		this.sender = sender;
-
 		String param = args.length > 0 ? args[0] : "";
-
 		Method method = this.methods.get(param.toLowerCase());
 
 		if (method != null) {
@@ -84,11 +84,15 @@ public abstract class FireCommand extends BukkitCommand {
 			return true;
 		}
 
-		this.execute(sender, args);
+		try {
+			method.invoke(this, sender, args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return true;
-
-
 	}
+
 
 	public abstract void execute(CommandSender sender, String[] args);
 
@@ -130,13 +134,12 @@ public abstract class FireCommand extends BukkitCommand {
 				int modifiers = method.getModifiers();
 
 				if (!Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
-					this.methods.put(parameter.value(), method);
-
-
+					this.methods.put(parameter.value().toLowerCase(), method);
 				}
 			}
 		}
 	}
+
 
 	//	Method to print all the methods found in the class
 	public void printMethods() {
