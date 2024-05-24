@@ -1,5 +1,6 @@
 package me.firedraong5.firesapi.menu;
 
+import me.firedraong5.firesapi.itemCreation.CustomItemCreator;
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -179,27 +180,13 @@ public class FireMenu {
 	 */
 	public void setItem(int slot, Material material, String name, List<String> lore, int amount) {
 
-		ItemStack item = new ItemStack(material, amount);
-
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(UtilsMessage.onChat(name));
-
-		meta.setLore(UtilsMessage.onChat(lore));
-
-		item.setItemMeta(meta);
+		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
 	}
 
 	//	Set items on certain pages
 	public void setItem(int slot, Material material, String name, List<String> lore, int amount, int page) {
 
-		ItemStack item = new ItemStack(material, amount);
-
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(UtilsMessage.onChat(name));
-
-		meta.setLore(UtilsMessage.onChat(lore));
-
-		item.setItemMeta(meta);
+		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
 
 		if (isPageValid(List.of(inventory.getContents()), page, size)) {
 			inventory.setItem(slot, item);
@@ -209,14 +196,7 @@ public class FireMenu {
 	//	Set the items that switch between the pages
 	public void setItemMenuRightSwitcher(int slot, Material material, String name, List<String> lore, int amount, int page, int nextPage) {
 
-		ItemStack item = new ItemStack(material, amount);
-
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(UtilsMessage.onChat(name));
-
-		meta.setLore(UtilsMessage.onChat(lore));
-
-		item.setItemMeta(meta);
+		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
 
 		if (isPageValid(List.of(inventory.getContents()), page + 1, size)) {
 			inventory.setItem(slot, item);
@@ -231,14 +211,7 @@ public class FireMenu {
 	//	Left switcher
 	public void setItemMenuLeftSwitcher(int slot, Material material, String name, List<String> lore, int amount, int page, int previousPage) {
 
-		ItemStack item = new ItemStack(material, amount);
-
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(UtilsMessage.onChat(name));
-
-		meta.setLore(UtilsMessage.onChat(lore));
-
-		item.setItemMeta(meta);
+		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
 
 		if (isPageValid(List.of(inventory.getContents()), page - 1, size)) {
 			inventory.setItem(slot, item);
@@ -367,7 +340,6 @@ public class FireMenu {
 	}
 
 
-
 	/**
 	 * Add a player head to the inventory
 	 * @param player Player to get the head
@@ -377,26 +349,12 @@ public class FireMenu {
 	 */
 	public void addPlayerHead(Player player, @Nullable String name, int slot) {
 
-		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-		SkullMeta meta = (SkullMeta) item.getItemMeta();
-
-		if (name == null)
-			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
-
-		else if (name.contains("%player%"))
-			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
-
-		else
-			meta.displayName(Component.text(UtilsMessage.onChat(name)));
-
-
-		meta.setOwningPlayer(player);
-
-		item.setItemMeta(meta);
+		ItemStack item = getPlayerHead(player, name);
 
 		inventory.setItem(slot, item);
 
 	}
+
 
 	/**
 	 * Add a player head to the inventory
@@ -409,24 +367,7 @@ public class FireMenu {
 	 */
 	public void addPlayerHead(Player player, @Nullable String name, int slot, @NotNull List<String> lore) {
 
-		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-		SkullMeta meta = (SkullMeta) item.getItemMeta();
-
-		if (name == null)
-			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
-
-		else if (name.contains("%player%"))
-			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
-
-		else
-			meta.displayName(Component.text(UtilsMessage.onChat(name)));
-
-
-		meta.setOwningPlayer(player);
-
-		meta.setLore(UtilsMessage.onChat(lore));
-
-		item.setItemMeta(meta);
+		ItemStack item = getPlayerHead(player, name, lore);
 
 		inventory.setItem(slot, item);
 
@@ -441,26 +382,9 @@ public class FireMenu {
 	 */
 	public void getAllPlayerHeads(Player player, @Nullable String name, @NotNull List<String> lore) {
 
-			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-			SkullMeta meta = (SkullMeta) item.getItemMeta();
+		ItemStack item = getPlayerHead(player, name, lore);
 
-			if (name == null)
-				meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
-
-			else if (name.contains("%player%"))
-				meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
-
-			else
-				meta.displayName(Component.text(UtilsMessage.onChat(name)));
-
-
-			meta.setLore(UtilsMessage.onChat(lore));
-
-			meta.setOwningPlayer(player);
-
-			item.setItemMeta(meta);
-
-			inventory.addItem(item);
+		inventory.addItem(item);
 
 
 	}
@@ -476,23 +400,7 @@ public class FireMenu {
 
 	public void getAllPlayerHeads(Player player, @Nullable String name, @NotNull List<String> lore, int slot) {
 
-		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-		SkullMeta meta = (SkullMeta) item.getItemMeta();
-
-		if (name == null)
-			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
-
-		else if (name.contains("%player%"))
-			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
-
-		else
-			meta.displayName(Component.text(UtilsMessage.onChat(name)));
-
-		meta.setLore(UtilsMessage.onChat(lore));
-
-		meta.setOwningPlayer(player);
-
-		item.setItemMeta(meta);
+		ItemStack item = getPlayerHead(player, name, lore);
 
 		inventory.setItem(slot, item);
 
@@ -506,24 +414,7 @@ public class FireMenu {
 	 */
 	public void getAllPlayerHeads(Player player, @Nullable String name) {
 
-
-			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-			SkullMeta meta = (SkullMeta) item.getItemMeta();
-
-
-			if (name == null)
-				meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
-
-			else if (name.contains("%player%"))
-				meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
-
-			else
-				meta.displayName(Component.text(UtilsMessage.onChat(name)));
-
-
-			meta.setOwningPlayer(player);
-
-			item.setItemMeta(meta);
+		ItemStack item = getPlayerHead(player, name);
 
 		inventory.addItem(item);
 
@@ -559,6 +450,65 @@ public class FireMenu {
 		return newItems;
 	}
 
+
+	/*
+	 * Get the player head
+
+	 * @param player Player to get the head
+	 * @param name Name of the head (null = player name)
+	 * @param lore Lore of the head (null = no lore)
+
+	 * @return ItemStack
+
+	 */
+	private @NotNull ItemStack getPlayerHead(Player player, @Nullable String name, @NotNull List<String> lore) {
+		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+		SkullMeta meta = (SkullMeta) item.getItemMeta();
+
+		if (name == null)
+			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
+
+		else if (name.contains("%player%"))
+			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
+
+		else
+			meta.displayName(Component.text(UtilsMessage.onChat(name)));
+
+		meta.setLore(UtilsMessage.onChat(lore));
+
+		meta.setOwningPlayer(player);
+
+		item.setItemMeta(meta);
+		return item;
+	}
+
+	/*
+	 * Get the player head
+	 *
+	 * @param player Player to get the head
+	 * @param name Name of the head (null = player name)
+	 *
+	 * @return ItemStack
+	 */
+	private @NotNull ItemStack getPlayerHead(Player player, @Nullable String name) {
+		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+		SkullMeta meta = (SkullMeta) item.getItemMeta();
+
+		if (name == null)
+			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
+
+		else if (name.contains("%player%"))
+			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
+
+		else
+			meta.displayName(Component.text(UtilsMessage.onChat(name)));
+
+
+		meta.setOwningPlayer(player);
+
+		item.setItemMeta(meta);
+		return item;
+	}
 
 
 

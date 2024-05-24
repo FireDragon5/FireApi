@@ -8,6 +8,7 @@ public abstract class Button {
 	private final String name;
 	private final int slot;
 
+
 	public Button(String name, int slot) {
 		this.name = name;
 		this.slot = slot;

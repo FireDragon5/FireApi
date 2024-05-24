@@ -164,14 +164,22 @@ public static ItemMeta getItemMeta(@NotNull ItemStack item) {
 	 * @return The item
 	 */
 	public static @NotNull ItemStack createItem(Material material, int amount, String name, int durability, List<String> lore) {
-		ItemStack item = new ItemStack(material, amount);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(UtilsMessage.onChat(name));
-		meta.setLore(UtilsMessage.onChat(lore));
-		item.setItemMeta(meta);
+		ItemStack item = createItem(material, amount, name, lore);
 		item.setDurability((short) durability);
 		return item;
 	}
+
+	/**
+	 * Create a new item
+	 *
+	 * @param material Material of the item
+	 * @param name Name of the item
+	 * @return The item
+	 */
+	public static @NotNull ItemStack createItem(Material material, String name) {
+		return createItem(material, 1, name, null);
+	}
+
 
 	/**
 	 * Create a new item
@@ -185,12 +193,7 @@ public static ItemMeta getItemMeta(@NotNull ItemStack item) {
 	 */
 	public static @NotNull ItemStack createItemWithPlayerMessage(Player player, Material material, int amount, String name,
 																 int durability, String playerMessage, List<String> lore) {
-		ItemStack item = new ItemStack(material, amount);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(UtilsMessage.onChat(name));
-		meta.setLore(UtilsMessage.onChat(lore));
-		item.setItemMeta(meta);
-		item.setDurability((short) durability);
+		ItemStack item = createItem(material, amount, name, durability, lore);
 
 		UtilsMessage.sendMessage(player, playerMessage);
 
