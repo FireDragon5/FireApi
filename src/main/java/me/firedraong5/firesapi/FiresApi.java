@@ -7,8 +7,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FiresApi extends JavaPlugin {
 
+	//    Get the instance of the plugin
+	private static FiresApi instance;
+
+
     @Override
     public void onEnable() {
+
+		instance = this;
 
         getServer().getPluginManager().registerEvents(new UtilsMessage(), this);
     }
@@ -17,5 +23,9 @@ public final class FiresApi extends JavaPlugin {
     public void onDisable() {
 
 
+	}
+
+	public static FiresApi getInstance() {
+		return instance;
     }
 }
