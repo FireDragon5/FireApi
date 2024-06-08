@@ -1,6 +1,7 @@
 package me.firedraong5.firesapi.menu;
 
 import me.firedraong5.firesapi.itemCreation.CustomItemCreator;
+import me.firedraong5.firesapi.utils.PageUtil;
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -20,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
-public class FireMenu {
+@SuppressWarnings("unused")
+public final class FireMenu {
 
 	private final Player player;
 	private final Inventory inventory;
@@ -43,8 +44,6 @@ public class FireMenu {
 		this.size = size;
 
 		this.inventory = Bukkit.createInventory(player, size, Component.text(UtilsMessage.onChat(name)));
-
-
 	}
 
 	//	Get the class name
@@ -179,49 +178,10 @@ public class FireMenu {
 	 * @param amount Amount of the item
 	 */
 	public void setItem(int slot, Material material, String name, List<String> lore, int amount) {
-
 		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
 	}
 
-	//	Set items on certain pages
-	public void setItem(int slot, Material material, String name, List<String> lore, int amount, int page) {
 
-		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
-
-		if (isPageValid(List.of(inventory.getContents()), page, size)) {
-			inventory.setItem(slot, item);
-		}
-	}
-
-	//	Set the items that switch between the pages
-	public void setItemMenuRightSwitcher(int slot, Material material, String name, List<String> lore, int amount, int page, int nextPage) {
-
-		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
-
-		if (isPageValid(List.of(inventory.getContents()), page + 1, size)) {
-			inventory.setItem(slot, item);
-		}
-
-		if (isPageValid(List.of(inventory.getContents()), nextPage, size)) {
-			inventory.setItem(slot, item);
-		}
-
-	}
-
-	//	Left switcher
-	public void setItemMenuLeftSwitcher(int slot, Material material, String name, List<String> lore, int amount, int page, int previousPage) {
-
-		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
-
-		if (isPageValid(List.of(inventory.getContents()), page - 1, size)) {
-			inventory.setItem(slot, item);
-		}
-
-		if (isPageValid(List.of(inventory.getContents()), previousPage, size)) {
-			inventory.setItem(slot, item);
-		}
-
-	}
 
 
 
@@ -233,8 +193,9 @@ public class FireMenu {
 		player.openInventory(inventory);
 	}
 
+
 	/**
-	 * When slotNumbers are turn it will show the slot numbers
+	 * Set the inventory
 	 */
 	public void slotNumbers() {
 			ItemStack item = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
@@ -421,45 +382,11 @@ public class FireMenu {
 	}
 
 
-	//	Page
-	public static boolean isPageValid(List<ItemStack> items, int page, int size) {
-
-		if (page <= 0) {
-			return false;
-		}
-
-		int upperLimit = page * size;
-		int lowerLimit = upperLimit - size;
-
-		return items.size() > lowerLimit;
-	}
-
-
-	public static List<ItemStack> getPageItems(List<ItemStack> items, int page, int size) {
-
-		int upperLimit = page * size;
-		int lowerLimit = upperLimit - size;
-
-		List<ItemStack> newItems = new ArrayList<>();
-		for (int i = lowerLimit; i < upperLimit; i++) {
-			if (items.size() > i) {
-				newItems.add(items.get(i));
-			}
-		}
-
-		return newItems;
-	}
-
-
-	/*
-	 * Get the player head
-
+	/**
 	 * @param player Player to get the head
 	 * @param name Name of the head (null = player name)
-	 * @param lore Lore of the head (null = no lore)
-
+	 * @param lore Lore of the head
 	 * @return ItemStack
-
 	 */
 	private @NotNull ItemStack getPlayerHead(Player player, @Nullable String name, @NotNull List<String> lore) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
@@ -482,12 +409,10 @@ public class FireMenu {
 		return item;
 	}
 
-	/*
-	 * Get the player head
-	 *
+
+	/**
 	 * @param player Player to get the head
 	 * @param name Name of the head (null = player name)
-	 *
 	 * @return ItemStack
 	 */
 	private @NotNull ItemStack getPlayerHead(Player player, @Nullable String name) {
@@ -510,6 +435,67 @@ public class FireMenu {
 		return item;
 	}
 
+
+	/**
+	 * @param material Material of the item
+	 * @param name Name of the item
+	 * @param page Page to get
+	 */
+	public void PageGui(Material material, String name, int page) {
+		List<ItemStack> allItems = new ArrayList<>();
+
+		for (int i = 0; i < 135; i++) {
+			ItemStack item = CustomItemCreator.createItem(material, name);
+			allItems.add(item);
+		}
+
+		itemStackPage(page, allItems);
+
+	}
+
+
+	/**
+	 * @param player Player to get the head
+	 * @param name Name of the head (null = player name)
+	 * @param page Page to get
+	 */
+	//	PageGUI for player heads
+	private void PageGui(Player player, @Nullable String name, int page) {
+		List<ItemStack> allItems = new ArrayList<>();
+
+		for (int i = 0; i < 135; i++) {
+			ItemStack item = getPlayerHead(player, name);
+			allItems.add(item);
+		}
+
+		itemStackPage(page, allItems);
+
+	}
+
+
+	/**
+	 * @param page Page to get
+	 * @param allItems All the items
+	 */
+	private void itemStackPage(int page, List<ItemStack> allItems) {
+		ItemStack left;
+		if (PageUtil.isPageValid(allItems, page - 1, 52))
+			left = CustomItemCreator.createItem(Material.ARROW, 1, "&aPrevious Page");
+		else left = CustomItemCreator.createItem(Material.BARRIER, 1, "&cPrevious Page");
+		inventory.setItem(0, left);
+
+
+		ItemStack right;
+		if (PageUtil.isPageValid(allItems, page + 1, 52))
+			right = CustomItemCreator.createItem(Material.ARROW, 1, "&aNext Page");
+		else right = CustomItemCreator.createItem(Material.BARRIER, 1, "&cNext Page");
+		inventory.setItem(8, right);
+
+
+		for (ItemStack is : PageUtil.getPageItems(allItems, page, 52)) {
+			inventory.addItem(is);
+		}
+	}
 
 
 }

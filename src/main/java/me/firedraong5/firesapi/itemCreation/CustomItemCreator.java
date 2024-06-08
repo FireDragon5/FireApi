@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 
+@SuppressWarnings("unused")
 public class CustomItemCreator {
 
 
@@ -169,6 +170,7 @@ public static ItemMeta getItemMeta(@NotNull ItemStack item) {
 		return item;
 	}
 
+
 	/**
 	 * Create a new item
 	 *
@@ -212,4 +214,9 @@ public static ItemMeta getItemMeta(@NotNull ItemStack item) {
 		player.getInventory().addItem(item);
 	}
 
+	public static ItemStack createItem(Material material, int amount, String itemName) {
+
+		return createItem(material, amount, itemName, null);
+
+	}
 }
