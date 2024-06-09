@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
-public final class FireMenu {
+public class FireMenu {
 
 	private final Player player;
 	private final Inventory inventory;
@@ -55,7 +55,6 @@ public final class FireMenu {
 	/**
 	 * Create a new menu
 	 */
-
 	public FireMenu() {
 		this.player = null;
 		inventory = null;
@@ -415,7 +414,8 @@ public final class FireMenu {
 	 * @param name Name of the head (null = player name)
 	 * @return ItemStack
 	 */
-	private @NotNull ItemStack getPlayerHead(Player player, @Nullable String name) {
+	@NotNull
+	ItemStack getPlayerHead(Player player, @Nullable String name) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
 
@@ -436,66 +436,6 @@ public final class FireMenu {
 	}
 
 
-	/**
-	 * @param material Material of the item
-	 * @param name Name of the item
-	 * @param page Page to get
-	 */
-	public void PageGui(Material material, String name, int page) {
-		List<ItemStack> allItems = new ArrayList<>();
-
-		for (int i = 0; i < 135; i++) {
-			ItemStack item = CustomItemCreator.createItem(material, name);
-			allItems.add(item);
-		}
-
-		itemStackPage(page, allItems);
-
-	}
-
-
-	/**
-	 * @param player Player to get the head
-	 * @param name Name of the head (null = player name)
-	 * @param page Page to get
-	 */
-	//	PageGUI for player heads
-	private void PageGui(Player player, @Nullable String name, int page) {
-		List<ItemStack> allItems = new ArrayList<>();
-
-		for (int i = 0; i < 135; i++) {
-			ItemStack item = getPlayerHead(player, name);
-			allItems.add(item);
-		}
-
-		itemStackPage(page, allItems);
-
-	}
-
-
-	/**
-	 * @param page Page to get
-	 * @param allItems All the items
-	 */
-	private void itemStackPage(int page, List<ItemStack> allItems) {
-		ItemStack left;
-		if (PageUtil.isPageValid(allItems, page - 1, 52))
-			left = CustomItemCreator.createItem(Material.ARROW, 1, "&aPrevious Page");
-		else left = CustomItemCreator.createItem(Material.BARRIER, 1, "&cPrevious Page");
-		inventory.setItem(0, left);
-
-
-		ItemStack right;
-		if (PageUtil.isPageValid(allItems, page + 1, 52))
-			right = CustomItemCreator.createItem(Material.ARROW, 1, "&aNext Page");
-		else right = CustomItemCreator.createItem(Material.BARRIER, 1, "&cNext Page");
-		inventory.setItem(8, right);
-
-
-		for (ItemStack is : PageUtil.getPageItems(allItems, page, 52)) {
-			inventory.addItem(is);
-		}
-	}
 
 
 }

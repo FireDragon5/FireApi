@@ -49,7 +49,7 @@ public class Menu {
 		return buttons;
 	}
 
-	protected final int getSize() {
+	protected int getSize() {
 		return size;
 	}
 
@@ -57,7 +57,7 @@ public class Menu {
 		return title;
 	}
 
-	protected final void setSize(int size) {
+	protected void setSize(int size) {
 		this.size = size;
 	}
 
