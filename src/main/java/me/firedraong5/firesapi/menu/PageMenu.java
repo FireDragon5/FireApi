@@ -122,11 +122,11 @@ public class PageMenu {
 	 * @param page Page to get
 	 */
 	//	PageGUI for player heads
-	private void PageGui(@Nullable String name, int page) {
+	public void PlayerHeadMenu(@Nullable String name, int page) {
 		List<ItemStack> allItems = new ArrayList<>();
 
 		for (Player playersOnline : Bukkit.getOnlinePlayers()) {
-			ItemStack item = new FireMenu().getPlayerHead(playersOnline, name);
+			ItemStack item = new FireMenu().getPlayerHead(playersOnline, "");
 			allItems.add(item);
 		}
 
