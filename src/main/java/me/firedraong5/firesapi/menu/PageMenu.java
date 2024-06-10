@@ -122,7 +122,7 @@ public class PageMenu {
 	 * @param page Page to get
 	 */
 	//	PageGUI for player heads
-	public void PlayerHeadMenu(@Nullable String name, int page) {
+	public void PlayerHeadsMenu(@Nullable String name, int page) {
 		List<ItemStack> allItems = new ArrayList<>();
 
 		for (Player playersOnline : Bukkit.getOnlinePlayers()) {
