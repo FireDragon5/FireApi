@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -218,7 +219,7 @@ public static ItemMeta getItemMeta(@NotNull ItemStack item) {
 	public static ItemStack createItem(Material material, int amount
 			, String itemName) {
 
-		return createItem(material, amount, itemName, null);
+		return createItem(material, amount, itemName, Collections.singletonList(""));
 
 	}
 }

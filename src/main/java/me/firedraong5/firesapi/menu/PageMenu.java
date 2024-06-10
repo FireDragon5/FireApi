@@ -174,7 +174,7 @@ public class PageMenu {
 	public void displayPageInfo(int currentPage, int totalPages) {
 		String pageInfo = String.format("&aPage %d of %d", currentPage, totalPages);
 		ItemStack pageInfoItem = CustomItemCreator.createItem(Material.PAPER, 1, pageInfo);
-		inventory.setItem(4, pageInfoItem); // Display the page info in the center of the menu
+		inventory.setItem(52, pageInfoItem); // Display the page info in the center of the menu
 	}
 
 }
