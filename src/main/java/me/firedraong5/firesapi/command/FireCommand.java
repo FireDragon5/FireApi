@@ -44,7 +44,7 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 		this.setPermission(permission);
 
-		this.findMethods();
+//		this.findMethods();
 
 		try {
 			Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
@@ -61,35 +61,35 @@ public abstract class FireCommand extends BukkitCommand {
 	public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
 		this.sender = sender;
 		String param = args.length > 0 ? args[0] : "";
-		Method method = this.methods.get(param.toLowerCase());
+//		Method method = this.methods.get(param.toLowerCase());
 
-//		Checking if the method requires a player and the sender is not a player
-		if (method != null) {
-			if (method.isAnnotationPresent(Parameter.class)) {
-				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
-				if (parameter.requiresPlayer() && !this.isPlayer()) {
-					UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
-					return true;
-				}
-			}
-		} else {
-			UtilsMessage.sendMessage(sender, ChatColor.RED + "Usage: /" + this.getName() +
-					" <" + this.methods.keySet().stream()
-					.filter(methodName -> !methodName.isEmpty())
-					.collect(Collectors.joining("|")) + ">");
-			return true;
-		}
+////		Checking if the method requires a player and the sender is not a player
+//		if (method != null) {
+//			if (method.isAnnotationPresent(Parameter.class)) {
+//				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
+//				if (parameter.requiresPlayer() && !this.isPlayer()) {
+//					UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
+//					return true;
+//				}
+//			}
+//		} else {
+//			UtilsMessage.sendMessage(sender, ChatColor.RED + "Usage: /" + this.getName() +
+//					" <" + this.methods.keySet().stream()
+//					.filter(methodName -> !methodName.isEmpty())
+//					.collect(Collectors.joining("|")) + ">");
+//			return true;
+//		}
 
 		if (this.getPermission() != null && !sender.hasPermission(this.getPermission())) {
 			UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
 			return true;
 		}
 
-		try {
-			method.invoke(this, sender, args);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			method.invoke(this, sender, args);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 		return true;
 	}
@@ -102,11 +102,11 @@ public abstract class FireCommand extends BukkitCommand {
 											 @NotNull String alias, @NotNull String[] args)
 			throws IllegalArgumentException {
 
-		if (args.length == 1) {
-			return this.methods.keySet().stream()
-					.filter(methodName -> !methodName.isEmpty())
-					.collect(Collectors.toList());
-		}
+//		if (args.length == 1) {
+//			return this.methods.keySet().stream()
+//					.filter(methodName -> !methodName.isEmpty())
+//					.collect(Collectors.toList());
+//		}
 
 		return onTabComplete(sender, args);
 	}
