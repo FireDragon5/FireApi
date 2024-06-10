@@ -9,9 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +96,11 @@ public class PageMenu {
 		return this;
 	}
 
+	//	open the menu
+	public void open() {
+		player.openInventory(inventory);
+	}
+
 
 	/**
 	 * @param material Material of the item
@@ -114,15 +117,17 @@ public class PageMenu {
 
 		itemStackPage(page, allItems);
 
+		open();
+
+
 	}
 
 
 	/**
-	 * @param name Name of the head (null = player name)
 	 * @param page Page to get
 	 */
 	//	PageGUI for player heads
-	public void PlayerHeadsMenu(@Nullable String name, int page) {
+	public void PlayerHeadsMenu(int page) {
 		List<ItemStack> allItems = new ArrayList<>();
 
 		for (Player playersOnline : Bukkit.getOnlinePlayers()) {
@@ -132,6 +137,7 @@ public class PageMenu {
 
 		itemStackPage(page, allItems);
 
+		open();
 	}
 
 
@@ -154,12 +160,21 @@ public class PageMenu {
 		else right = CustomItemCreator.createItem(Material.BARRIER, 1, "&cNext Page");
 
 
+		displayPageInfo(page, PageUtil.getTotalPages(allItems, 52));
+
+
 		inventory.setItem(8, right);
 
 
 		for (ItemStack is : PageUtil.getPageItems(allItems, page, 52)) {
 			inventory.setItem(inventory.firstEmpty(), is);
 		}
+	}
+
+	public void displayPageInfo(int currentPage, int totalPages) {
+		String pageInfo = String.format("&aPage %d of %d", currentPage, totalPages);
+		ItemStack pageInfoItem = CustomItemCreator.createItem(Material.PAPER, 1, pageInfo);
+		inventory.setItem(4, pageInfoItem); // Display the page info in the center of the menu
 	}
 
 }

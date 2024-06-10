@@ -1,7 +1,7 @@
 package me.firedraong5.firesapi.menu;
 
 import me.firedraong5.firesapi.itemCreation.CustomItemCreator;
-import me.firedraong5.firesapi.utils.PageUtil;
+
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -120,7 +120,7 @@ public class FireMenu {
 	 */
 	public void setItem(int slot, Material material) {
 
-		ItemStack item = new ItemStack(material);
+		ItemStack item = CustomItemCreator.createItem(material, 1, "&e");
 
 		inventory.setItem(slot, item);
 	}
@@ -135,11 +135,7 @@ public class FireMenu {
 	 */
 	public void setItem(int slot, Material material, String name) {
 
-		ItemStack item = new ItemStack(material);
-
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(UtilsMessage.onChat(name));
-		item.setItemMeta(meta);
+		ItemStack item = CustomItemCreator.createItem(material, 1, name);
 
 
 		inventory.setItem(slot, item);
@@ -154,15 +150,7 @@ public class FireMenu {
 	 */
 	public void setItem(int slot, Material material, String name, List<String> lore) {
 
-		ItemStack item = new ItemStack(material);
-
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(UtilsMessage.onChat(name));
-
-		meta.setLore(UtilsMessage.onChat(lore));
-
-		item.setItemMeta(meta);
-
+		ItemStack item = CustomItemCreator.createItem(material, 1, name, lore);
 
 		inventory.setItem(slot, item);
 	}
@@ -434,8 +422,6 @@ public class FireMenu {
 		item.setItemMeta(meta);
 		return item;
 	}
-
-
 
 
 }

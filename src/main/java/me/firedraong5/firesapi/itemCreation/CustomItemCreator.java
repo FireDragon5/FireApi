@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @SuppressWarnings("unused")
@@ -21,7 +22,7 @@ public class CustomItemCreator {
 
 //	Get the item lore
 public static String getItemLore(@NotNull ItemStack item) {
-		return item.getItemMeta().getLore().toString();
+	return Objects.requireNonNull(item.getItemMeta().getLore()).toString();
 	}
 
 //	Get the item material
@@ -118,15 +119,6 @@ public static ItemMeta getItemMeta(@NotNull ItemStack item) {
 	}
 
 	/**
-	 * Set the item
-	 * @param item Item to set
-	 * @param newItem New item
-	 */
-	public static void setItem(ItemStack item, ItemStack newItem) {
-		item = newItem;
-	}
-
-	/**
 	 * Hide the NBT of the item
 	 *
 	 * @param item Item to hide
@@ -214,7 +206,17 @@ public static ItemMeta getItemMeta(@NotNull ItemStack item) {
 		player.getInventory().addItem(item);
 	}
 
-	public static ItemStack createItem(Material material, int amount, String itemName) {
+
+	/**
+	 * Create a new item
+	 *
+	 * @param material Material of the item
+	 * @param amount Amount of the item  default value = 1
+	 * @param itemName Name of the item
+	 * @return ItemStack
+	 */
+	public static ItemStack createItem(Material material, int amount
+			, String itemName) {
 
 		return createItem(material, amount, itemName, null);
 

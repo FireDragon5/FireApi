@@ -1,6 +1,5 @@
 package me.firedraong5.firesapi.utils;
 
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -60,4 +59,7 @@ public class PageUtil {
 
 	}
 
+	public static int getTotalPages(List<ItemStack> allItems, int i) {
+		return (int) Math.ceil((double) allItems.size() / i);
+	}
 }
