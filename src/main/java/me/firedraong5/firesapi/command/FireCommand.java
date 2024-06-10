@@ -1,7 +1,7 @@
 package me.firedraong5.firesapi.command;
 
 
-import me.firedraong5.firesapi.annotation.Parameter;
+
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,21 +15,18 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+
 
 import java.util.Arrays;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @SuppressWarnings("unused")
 public abstract class FireCommand extends BukkitCommand {
 
 	private CommandSender sender;
 
-	public final Map<String, Method> methods = new HashMap<>();
 
 	public FireCommand(@NotNull String command,
 					   @NotNull String[] aliases, @NotNull String description, String permission) {
@@ -60,36 +57,14 @@ public abstract class FireCommand extends BukkitCommand {
 	@Override
 	public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
 		this.sender = sender;
-		String param = args.length > 0 ? args[0] : "";
-//		Method method = this.methods.get(param.toLowerCase());
-
-////		Checking if the method requires a player and the sender is not a player
-//		if (method != null) {
-//			if (method.isAnnotationPresent(Parameter.class)) {
-//				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
-//				if (parameter.requiresPlayer() && !this.isPlayer()) {
-//					UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
-//					return true;
-//				}
-//			}
-//		} else {
-//			UtilsMessage.sendMessage(sender, ChatColor.RED + "Usage: /" + this.getName() +
-//					" <" + this.methods.keySet().stream()
-//					.filter(methodName -> !methodName.isEmpty())
-//					.collect(Collectors.joining("|")) + ">");
-//			return true;
-//		}
 
 		if (this.getPermission() != null && !sender.hasPermission(this.getPermission())) {
 			UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
 			return true;
 		}
 
-//		try {
-//			method.invoke(this, sender, args);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+
+		this.execute(sender, args);
 
 		return true;
 	}
@@ -102,11 +77,6 @@ public abstract class FireCommand extends BukkitCommand {
 											 @NotNull String alias, @NotNull String[] args)
 			throws IllegalArgumentException {
 
-//		if (args.length == 1) {
-//			return this.methods.keySet().stream()
-//					.filter(methodName -> !methodName.isEmpty())
-//					.collect(Collectors.toList());
-//		}
 
 		return onTabComplete(sender, args);
 	}
@@ -128,26 +98,6 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 	}
 
-	private void findMethods() {
-		for (Method method : this.getClass().getDeclaredMethods()) {
-			if (method.isAnnotationPresent(Parameter.class)) {
-				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
-				int modifiers = method.getModifiers();
-
-				if (!Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
-					this.methods.put(parameter.value().toLowerCase(), method);
-				}
-			}
-		}
-	}
-
-
-	//	Method to print all the methods found in the class
-	public void printMethods() {
-		this.methods.forEach((key, value) -> {
-			System.out.println(key + " : " + value.getName());
-		});
-	}
 
 
 }
