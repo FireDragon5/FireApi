@@ -375,7 +375,7 @@ public class FireMenu {
 	 * @param lore Lore of the head
 	 * @return ItemStack
 	 */
-	private @NotNull ItemStack getPlayerHead(Player player, @Nullable String name, @NotNull List<String> lore) {
+	public @NotNull ItemStack getPlayerHead(Player player, @Nullable String name, @NotNull List<String> lore) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
 
