@@ -22,6 +22,8 @@ public class PageMenu {
 	private String title = "Page Menu";
 	private int size = 52;
 
+	private boolean displayPageInfo = true;
+
 	/**
 	 * Create a new menu
 	 *
@@ -101,6 +103,21 @@ public class PageMenu {
 	}
 
 
+//	If this is true show it else don't show it in the inventory
+
+	/**
+	 * Display the page info
+	 */
+	private boolean isDisplayPageInfo() {
+		return displayPageInfo;
+	}
+
+	public void setDisplayPageInfo(boolean displayPageInfo) {
+		this.displayPageInfo = displayPageInfo;
+	}
+
+
+
 	/**
 	 * @param material Material of the item
 	 * @param name Name of the item
@@ -146,8 +163,8 @@ public class PageMenu {
 	/**
 	 * @param page Page to get
 	 * @param allItems Items to get
-	 * @param prevPageMaterial
-	 * @param nextPageMaterial
+	 * @param prevPageMaterial Material of the previous page
+	 * @param nextPageMaterial Material of the next page
 	 */
 	private void itemStackPage(int page, List<ItemStack> allItems, Material prevPageMaterial, Material nextPageMaterial) {
 		ItemStack left;
@@ -162,7 +179,6 @@ public class PageMenu {
 			right = CustomItemCreator.createItem(nextPageMaterial, 1, "&aNext Page");
 		else right = CustomItemCreator.createItem(Material.BARRIER, 1, "&cNext Page");
 
-		displayPageInfo(page, PageUtil.getTotalPages(allItems, 52), Material.PAPER);
 
 		inventory.setItem(8, right);
 
@@ -171,11 +187,19 @@ public class PageMenu {
 		}
 	}
 
-	// Add parameter for GUI customization
-	public void displayPageInfo(int currentPage, int totalPages, Material pageInfoMaterial) {
-		String pageInfo = String.format("&aPage %d of %d", currentPage, totalPages);
-		ItemStack pageInfoItem = CustomItemCreator.createItem(pageInfoMaterial, 1, pageInfo);
-		inventory.setItem(53, pageInfoItem); // Display the page info in the center of the menu
+	/**
+	 * Add a menu info item to the inventory
+	 *
+	 * @param name Name of the item
+	 * @param slot Slot of the item
+	 * @param material Material of the item
+	 * @param lore Lore of the item
+	 */
+	public void addMenuInfo(String name, int slot, Material material, List<String> lore) {
+		ItemStack info = CustomItemCreator.createItem(material, 1, name, lore);
+		inventory.setItem(size - 1, info);
 	}
+
+
 
 }

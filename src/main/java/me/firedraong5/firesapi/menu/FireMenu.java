@@ -424,4 +424,13 @@ public class FireMenu {
 	}
 
 
+	//	Display a menu info item
+	public void displayMenuInfo(int slot, Material material, String name, List<String> lore) {
+		ItemStack item = CustomItemCreator.createItem(material, 1, name, lore);
+
+		inventory.setItem(slot, item);
+	}
+
+
+
 }
