@@ -60,6 +60,8 @@ public abstract class FireCommand extends BukkitCommand {
 
 
 	}
+
+
 	@Override
 	public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
 		this.sender = sender;
@@ -71,6 +73,10 @@ public abstract class FireCommand extends BukkitCommand {
 				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
 				if (parameter.requiresPlayer() && this.isPlayer()) {
 					UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
+					return true;
+				}
+				if (args.length < parameter.minArgs()) {
+					UtilsMessage.sendMessage(sender, ChatColor.RED + "Insufficient arguments. This command requires at least " + parameter.minArgs() + " arguments.");
 					return true;
 				}
 			}
@@ -100,7 +106,6 @@ public abstract class FireCommand extends BukkitCommand {
 
 		return true;
 	}
-
 	public abstract void execute(CommandSender sender, String[] args);
 
 	@Override

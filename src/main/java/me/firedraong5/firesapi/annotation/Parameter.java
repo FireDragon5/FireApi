@@ -12,7 +12,10 @@ public @interface Parameter {
 	//	@NotNull
 	String value();
 
+
+	int minArgs() default 0;
 	//	@NotNull
 	boolean requiresPlayer() default false;
+
 
 }
