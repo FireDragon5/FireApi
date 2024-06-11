@@ -124,11 +124,11 @@ public class PageMenu {
 	 * @param name Name of the item
 	 * @param page Page to get
 	 */
-	public void PageGui(Material material, String name, int page) {
+	public void PageGui(Material material, String name, List<String> lore, int page) {
 		List<ItemStack> allItems = new ArrayList<>();
 
 		for (int i = 0; i < 135; i++) {
-			ItemStack item = CustomItemCreator.createItem(material, name);
+			ItemStack item = CustomItemCreator.createItem(material, 1, name, lore);
 			allItems.add(item);
 		}
 
