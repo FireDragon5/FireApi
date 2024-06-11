@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,7 @@ public class PageMenu {
 	}
 
 	//	open the menu
-	public void open() {
+	private void open() {
 		player.openInventory(inventory);
 	}
 
@@ -188,15 +189,17 @@ public class PageMenu {
 	}
 
 	/**
-	 * Add a menu info item to the inventory
-	 *
+	 * <p>
+	 *     Add a menu info item to the inventory
+	 * 	  Will be place at the last slot in the inventory
+	 * </p>
 	 * @param name Name of the item
-	 * @param slot Slot of the item
 	 * @param material Material of the item
 	 * @param lore Lore of the item
 	 */
-	public void addMenuInfo(String name, int slot, Material material, List<String> lore) {
+	public void addMenuInfo(String name, Material material, @Nullable List<String> lore) {
 		ItemStack info = CustomItemCreator.createItem(material, 1, name, lore);
+
 		inventory.setItem(size - 1, info);
 	}
 
