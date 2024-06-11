@@ -60,7 +60,6 @@ public abstract class FireCommand extends BukkitCommand {
 
 
 	}
-
 	@Override
 	public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
 		this.sender = sender;
@@ -75,7 +74,7 @@ public abstract class FireCommand extends BukkitCommand {
 					return true;
 				}
 			}
-		} else {
+		} else if (!param.isEmpty()) {
 			UtilsMessage.sendMessage(sender, ChatColor.RED + "Usage: /" + this.getName() +
 					" <" + this.methods.keySet().stream()
 					.filter(methodName -> !methodName.isEmpty())
@@ -89,16 +88,18 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 
 		try {
-			method.invoke(this, sender, args);
+			if (method != null) {
+				method.invoke(this, sender, args);
+			} else {
+				this.execute(sender, args);
+			}
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		this.execute(sender, args);
-
 		return true;
 	}
-
 
 	public abstract void execute(CommandSender sender, String[] args);
 
