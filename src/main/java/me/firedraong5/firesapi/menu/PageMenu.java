@@ -132,7 +132,7 @@ public class PageMenu {
 			allItems.add(item);
 		}
 
-		itemStackPage(page, allItems, Material.ARROW, Material.BARRIER);
+		itemStackPage(page, allItems);
 
 		open();
 
@@ -155,7 +155,7 @@ public class PageMenu {
 		}
 
 		// Add parameters for GUI customization
-		itemStackPage(page, allItems, Material.ARROW, Material.BARRIER);
+		itemStackPage(page, allItems);
 
 		open();
 	}
@@ -164,20 +164,21 @@ public class PageMenu {
 	/**
 	 * @param page Page to get
 	 * @param allItems Items to get
-	 * @param prevPageMaterial Material of the previous page
-	 * @param nextPageMaterial Material of the next page
+
 	 */
-	private void itemStackPage(int page, List<ItemStack> allItems, Material prevPageMaterial, Material nextPageMaterial) {
+	private void itemStackPage(int page, List<ItemStack> allItems) {
 		ItemStack left;
 		if (PageUtil.isPageValid(allItems, page - 1, 52))
-			left = CustomItemCreator.createItem(prevPageMaterial, 1, "&aPrevious Page");
+			left = CustomItemCreator.createItem(
+					Material.BARRIER, 1, "&aPrevious Page");
 		else left = CustomItemCreator.createItem(Material.BARRIER, 1, "&cPrevious Page");
 		inventory.setItem(0, left);
 
 		ItemStack right;
 
 		if (PageUtil.isPageValid(allItems, page + 1, 52))
-			right = CustomItemCreator.createItem(nextPageMaterial, 1, "&aNext Page");
+			right = CustomItemCreator.createItem(
+					Material.ARROW, 1, "&aNext Page");
 		else right = CustomItemCreator.createItem(Material.BARRIER, 1, "&cNext Page");
 
 
