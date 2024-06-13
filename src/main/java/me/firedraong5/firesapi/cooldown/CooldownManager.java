@@ -1,5 +1,7 @@
 package me.firedraong5.firesapi.cooldown;
 
+import org.bukkit.command.CommandSender;
+
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -29,7 +31,14 @@ public class CooldownManager {
 		cooldowns.put(playerUUID, System.currentTimeMillis() + cooldownTimeInMs);
 	}
 
-	public boolean isCooldownActive(UUID playerUUID) {
+	public boolean isCooldownActive(UUID playerUUID, CommandSender sender, String cooldownSkipPermission) {
+		if (sender.hasPermission(cooldownSkipPermission)) {
+			return false;
+		}
+		return cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID) > System.currentTimeMillis();
+	}
+
+	private boolean isCooldownActive(UUID playerUUID) {
 		return cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID) > System.currentTimeMillis();
 	}
 

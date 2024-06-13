@@ -1,6 +1,17 @@
 me\firedraong5\firesapi\menu\Button.class
 me\firedraong5\firesapi\menu\PageMenu.class
+me\firedraong5\firesapi\cooldown\CooldownManager.class
 me\firedraong5\firesapi\FiresApi.class
+me\firedraong5\firesapi\command\FireCommand.class
+me\firedraong5\firesapi\error\Valid.class
 me\firedraong5\firesapi\utils\PageUtil.class
+me\firedraong5\firesapi\tabList\TabList.class
+me\firedraong5\firesapi\utils\UtilsTools.class
+me\firedraong5\firesapi\menu\FireMenu.class
+me\firedraong5\firesapi\utils\PlayerUtils.class
 me\firedraong5\firesapi\menu\Menu$1.class
 me\firedraong5\firesapi\annotation\Parameter.class
+me\firedraong5\firesapi\fileManager\FireManager.class
+me\firedraong5\firesapi\utils\UtilsMessage.class
+me\firedraong5\firesapi\menu\Menu.class
+me\firedraong5\firesapi\itemCreation\CustomItemCreator.class

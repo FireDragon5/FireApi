@@ -18,6 +18,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 
+@SuppressWarnings("unused")
+
 public class UtilsMessage implements Listener {
 
 	static Map<UUID, List<String>> delayMessage = new HashMap<>();
@@ -269,6 +271,20 @@ public class UtilsMessage implements Listener {
 		player.sendMessage(String.valueOf(Component.text(onChat(message))
 				.hoverEvent(HoverEvent.showText(Component.text(onChat(hoverText))))));
 	}
+
+	/**
+	 * @param player Player to send the message
+	 * @param message Message to send
+	 * @param replacements Replacements to make in the message
+	 */
+//	Text Replace method
+	public static void sendMessage(Player player, String message, Map<String, String> replacements) {
+		for (Map.Entry<String, String> entry : replacements.entrySet()) {
+			message = message.replace(entry.getKey(), entry.getValue());
+		}
+		player.sendMessage(onChat(message));
+	}
+
 
 
 
