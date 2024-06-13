@@ -3,19 +3,24 @@ package me.firedraong5.firesapi.cooldown;
 import java.util.HashMap;
 import java.util.UUID;
 
-
 @SuppressWarnings("unused")
 public class CooldownManager {
 	private final HashMap<UUID, Long> cooldowns = new HashMap<>();
-
 	private long cooldownTimeInMs;
 
+	private static CooldownManager instance;
 
-	public static CooldownManager getInstance() {
-		return new CooldownManager();
+	private CooldownManager() {
 	}
 
-	//	Set the cooldown time in milliseconds
+	public static CooldownManager getInstance() {
+		if (instance == null) {
+			instance = new CooldownManager();
+		}
+		return instance;
+	}
+
+	// Set the cooldown time in milliseconds
 	public void setCooldownTimeInMs(long cooldownTimeInMs) {
 		this.cooldownTimeInMs = cooldownTimeInMs;
 	}
@@ -31,5 +36,4 @@ public class CooldownManager {
 	public long getRemainingCooldownTime(UUID playerUUID) {
 		return isCooldownActive(playerUUID) ? cooldowns.get(playerUUID) - System.currentTimeMillis() : 0;
 	}
-
 }
