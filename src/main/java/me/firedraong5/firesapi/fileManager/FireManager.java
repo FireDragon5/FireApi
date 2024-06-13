@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 public class FireManager {
 
 	private final JavaPlugin plugin;

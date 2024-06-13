@@ -2,6 +2,7 @@ package me.firedraong5.firesapi.command;
 
 
 import me.firedraong5.firesapi.annotation.Parameter;
+import me.firedraong5.firesapi.cooldown.CooldownManager;
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,11 +20,8 @@ import java.lang.reflect.Field;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -68,10 +66,26 @@ public abstract class FireCommand extends BukkitCommand {
 		String param = args.length > 0 ? args[0] : "";
 		Method method = this.methods.get(param.toLowerCase());
 
+
+		if (sender instanceof Player playerCooldown) {
+			UUID playerUUID = playerCooldown.getUniqueId();
+
+			if (CooldownManager.getInstance().isCooldownActive(playerUUID)) {
+				long remainingTime = CooldownManager.getInstance().getRemainingCooldownTime(playerUUID);
+				UtilsMessage.sendMessage(playerCooldown, "&cYou are on cooldown for another &a" + remainingTime / 1000 + " &cseconds.");
+				return true;
+			}
+
+
+			CooldownManager.getInstance().startCooldown(playerUUID);
+		}
+
+
 		if (method != null) {
 			if (method.isAnnotationPresent(Parameter.class)) {
 				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
 				if (parameter.requiresPlayer() && this.isPlayer()) {
+					assert sender instanceof Player;
 					UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
 					return true;
 				}
@@ -89,6 +103,7 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 
 		if (this.getPermission() != null && !sender.hasPermission(this.getPermission())) {
+			assert sender instanceof Player;
 			UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
 			return true;
 		}
