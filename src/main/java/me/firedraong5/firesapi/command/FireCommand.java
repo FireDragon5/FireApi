@@ -67,20 +67,6 @@ public abstract class FireCommand extends BukkitCommand {
 		Method method = this.methods.get(param.toLowerCase());
 
 
-		if (sender instanceof Player playerCooldown) {
-			UUID playerUUID = playerCooldown.getUniqueId();
-
-			if (CooldownManager.getInstance().isCooldownActive(playerUUID)) {
-				long remainingTime = CooldownManager.getInstance().getRemainingCooldownTime(playerUUID);
-				UtilsMessage.sendMessage(playerCooldown, "&cYou are on cooldown for another &a" + remainingTime / 1000 + " &cseconds.");
-				return true;
-			}
-
-
-			CooldownManager.getInstance().startCooldown(playerUUID);
-		}
-
-
 		if (method != null) {
 			if (method.isAnnotationPresent(Parameter.class)) {
 				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
