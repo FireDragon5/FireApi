@@ -1,5 +1,6 @@
 package me.firedraong5.firesapi.utils;
 
+@SuppressWarnings("unused")
 public class UtilsTools {
 
 

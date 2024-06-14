@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("unused")
 public class PlayerUtils {
 
 	/**

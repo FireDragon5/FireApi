@@ -19,7 +19,6 @@ import java.util.*;
 
 
 @SuppressWarnings("unused")
-
 public class UtilsMessage implements Listener {
 
 	static Map<UUID, List<String>> delayMessage = new HashMap<>();

@@ -2,7 +2,6 @@ package me.firedraong5.firesapi.command;
 
 
 import me.firedraong5.firesapi.annotation.Parameter;
-import me.firedraong5.firesapi.cooldown.CooldownManager;
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
