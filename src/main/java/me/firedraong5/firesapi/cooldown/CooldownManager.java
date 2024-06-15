@@ -1,5 +1,6 @@
 package me.firedraong5.firesapi.cooldown;
 
+import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -8,11 +9,11 @@ import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class CooldownManager {
-	private final HashMap<UUID, Long> cooldowns = new HashMap<>();
-	private long cooldownTimeInMs;
+	private final HashMap<UUID, HashMap<String, Long>> cooldowns = new HashMap<>();
+	private final HashMap<String, Long> cooldownTimesInMs = new HashMap<>();
+	private final HashMap<String, String> cooldownByPassPermissions = new HashMap<>();
 
 	private static CooldownManager instance;
-	private String cooldownByPassPermission;
 
 	private CooldownManager() {
 	}
@@ -25,38 +26,71 @@ public class CooldownManager {
 	}
 
 	// Set the cooldown time in milliseconds
-	public void setCooldownTimeInMs(long cooldownTimeInMs) {
-		this.cooldownTimeInMs = cooldownTimeInMs;
+	public void setCooldownTimeInMs(String cooldownName, long cooldownTimeInMs) {
+		cooldownTimesInMs.put(cooldownName, cooldownTimeInMs);
 	}
 
 	public void setCooldownByPassPermission(String permission) {
-		this.cooldownByPassPermission = permission;
+		cooldownByPassPermissions.put(permission, permission);
 	}
 
-	public void startCooldown(Player player) {
+	public void startCooldown(Player player, String command) {
 		UUID playerUUID = player.getUniqueId();
+		String permission = cooldownByPassPermissions.get(command);
 
-		if (player.hasPermission(cooldownByPassPermission) || player.isOp()) {
+		if (player.hasPermission(permission) || player.isOp()) {
 			return;
 		}
 
-		cooldowns.put(playerUUID, System.currentTimeMillis() + cooldownTimeInMs);
+		if (!cooldowns.containsKey(playerUUID)) {
+			cooldowns.put(playerUUID, new HashMap<>());
+		}
+
+		cooldowns.get(playerUUID).put(command, System.currentTimeMillis() + cooldownTimesInMs.get(command));
 	}
 
-	public boolean isCooldownActive(Player player) {
+	public boolean isCooldownActive(Player player, String command) {
 		UUID playerUUID = player.getUniqueId();
+		String permission = cooldownByPassPermissions.get(command);
 
-		if (player.hasPermission(cooldownByPassPermission) || player.isOp()) {
+		if (player.hasPermission(permission) || player.isOp()) {
 			return false;
 		}
-		return cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID) > System.currentTimeMillis();
+
+		return cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID).containsKey(command) && cooldowns.get(playerUUID).get(command) > System.currentTimeMillis();
 	}
 
 
+	public long getRemainingCooldownTime(Player player, String command) {
+		UUID playerUUID = player.getUniqueId();
+		String permission = cooldownByPassPermissions.get(command);
+
+		if (player.hasPermission(permission) || player.isOp()) {
+			return 0;
+		}
+
+		if (cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID).containsKey(command)) {
+			return cooldowns.get(playerUUID).get(command) - System.currentTimeMillis();
+		}
+
+		return 0;
+	}
+
+	//	Get the remaining cooldown time
 	public long getRemainingCooldownTime(Player player) {
 		UUID playerUUID = player.getUniqueId();
+		long remainingTime = 0;
 
-		return isCooldownActive(player) ? cooldowns.get(playerUUID) - System.currentTimeMillis() : 0;
+		if (cooldowns.containsKey(playerUUID)) {
+			for (String command : cooldowns.get(playerUUID).keySet()) {
+				long time = cooldowns.get(playerUUID).get(command) - System.currentTimeMillis();
+				if (time > remainingTime) {
+					remainingTime = time;
+				}
+			}
+		}
+
+		return remainingTime;
 	}
 
 	//	Cooldown message
@@ -64,13 +98,13 @@ public class CooldownManager {
 //		if cooldown is less then a min then show seconds else show min or hour or day
 		long remainingTime = getRemainingCooldownTime(player);
 		if (remainingTime < 60000) {
-			player.sendMessage("You are on cooldown for another " + remainingTime / 1000 + " seconds.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + remainingTime / 1000 + "&e seconds.");
 		} else if (remainingTime < 3600000) {
-			player.sendMessage("You are on cooldown for another " + remainingTime / 60000 + " minutes.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + remainingTime / 60000 + "&e minutes.");
 		} else if (remainingTime < 86400000) {
-			player.sendMessage("You are on cooldown for another " + remainingTime / 3600000 + " hours.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + remainingTime / 3600000 + "&e hours.");
 		} else {
-			player.sendMessage("You are on cooldown for another " + remainingTime / 86400000 + " days.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + remainingTime / 86400000 + "&e days.");
 		}
 	}
 

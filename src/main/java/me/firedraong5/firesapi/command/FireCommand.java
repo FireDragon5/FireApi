@@ -39,7 +39,7 @@ public abstract class FireCommand extends BukkitCommand {
 		this.setDescription(description);
 
 //		If the String permission = "default" then the permission will be null
-		if (permission.equals("default")) {
+		if (permission.equals("default") || permission.isEmpty()) {
 			permission = null;
 		}
 		this.setPermission(permission);

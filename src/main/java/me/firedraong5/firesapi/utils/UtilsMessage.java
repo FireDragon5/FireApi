@@ -174,6 +174,15 @@ public class UtilsMessage implements Listener {
 	 * @param player Player to send the message
 	 * @param permission Permission that the player doesn't have
 	 */
+	public static void noPermissionMessage(@Nonnull Player player, String permission, boolean showPermission) {
+
+		if (showPermission) {
+			UtilsMessage.errorMessage(player, "&7You don't have the permission &c" + permission + " &7to do that!");
+		} else {
+			UtilsMessage.errorMessage(player, "&7You don't have the permission to do that!");
+		}
+	}
+
 	public static void noPermissionMessage(@Nonnull Player player, String permission) {
 		UtilsMessage.errorMessage(player, "&7You don't have the permission &c" + permission + " &7to do that!");
 	}
