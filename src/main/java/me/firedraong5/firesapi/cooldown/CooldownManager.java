@@ -13,6 +13,10 @@ public class CooldownManager {
 	private final HashMap<String, Long> cooldownTimesInMs = new HashMap<>();
 	private final HashMap<String, String> cooldownByPassPermissions = new HashMap<>();
 
+	private String singlePermission;
+	private boolean useSinglePermission;
+
+
 	private static CooldownManager instance;
 
 	private CooldownManager() {
@@ -30,15 +34,20 @@ public class CooldownManager {
 		cooldownTimesInMs.put(cooldownName, cooldownTimeInMs);
 	}
 
-	public void setCooldownByPassPermission(String permission) {
-		cooldownByPassPermissions.put(permission, permission);
+	public void setCooldownByPassPermission(String permission, String command) {
+		cooldownByPassPermissions.put(permission, command);
+	}
+
+	public void setSinglePermission(String permission, boolean useSinglePermission) {
+		this.singlePermission = permission;
+		this.useSinglePermission = useSinglePermission;
 	}
 
 	public void startCooldown(Player player, String command) {
 		UUID playerUUID = player.getUniqueId();
-		String permission = cooldownByPassPermissions.get(command);
+		String permission = useSinglePermission ? singlePermission : cooldownByPassPermissions.get(command);
 
-		if (player.hasPermission(permission) || player.isOp()) {
+		if (permission != null && (player.hasPermission(permission) || player.isOp())) {
 			return;
 		}
 
@@ -51,15 +60,14 @@ public class CooldownManager {
 
 	public boolean isCooldownActive(Player player, String command) {
 		UUID playerUUID = player.getUniqueId();
-		String permission = cooldownByPassPermissions.get(command);
+		String permission = useSinglePermission ? singlePermission : cooldownByPassPermissions.get(command);
 
-		if (player.hasPermission(permission) || player.isOp()) {
+		if (permission != null && (player.hasPermission(permission) || player.isOp())) {
 			return false;
 		}
 
 		return cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID).containsKey(command) && cooldowns.get(playerUUID).get(command) > System.currentTimeMillis();
 	}
-
 
 	public long getRemainingCooldownTime(Player player, String command) {
 		UUID playerUUID = player.getUniqueId();
