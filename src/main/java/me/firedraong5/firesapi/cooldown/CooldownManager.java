@@ -104,16 +104,17 @@ public class CooldownManager {
 
 	//	Cooldown message
 	public void sendCooldownMessage(Player player) {
-//		if cooldown is less then a min then show seconds else show min or hour or day
-		long remainingTime = getRemainingCooldownTime(player);
-		if (remainingTime < 60000) {
-			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + remainingTime / 1000 + "&e seconds.");
-		} else if (remainingTime < 3600000) {
-			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + remainingTime / 60000 + "&e minutes.");
-		} else if (remainingTime < 86400000) {
-			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + remainingTime / 3600000 + "&e hours.");
+		UUID playerUUID = player.getUniqueId();
+		double remainingTime = getRemainingCooldownTime(player) / 1000.0; // Convert to seconds
+
+		if (remainingTime < 60) {
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime) + "&e seconds.");
+		} else if (remainingTime < 3600) {
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 60) + "&e minutes.");
+		} else if (remainingTime < 86400) {
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 3600) + "&e hours.");
 		} else {
-			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + remainingTime / 86400000 + "&e days.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 86400) + "&e days.");
 		}
 	}
 
