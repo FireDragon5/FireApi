@@ -69,6 +69,7 @@ public class CooldownManager {
 		return cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID).containsKey(command) && cooldowns.get(playerUUID).get(command) > System.currentTimeMillis();
 	}
 
+
 	public long getRemainingCooldownTime(Player player, String command) {
 		UUID playerUUID = player.getUniqueId();
 		String permission = cooldownByPassPermissions.get(command);
