@@ -3,6 +3,7 @@ package me.firedraong5.firesapi.cooldown;
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -115,6 +116,33 @@ public class CooldownManager {
 			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 3600) + "&e hours.");
 		} else {
 			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 86400) + "&e days.");
+		}
+	}
+
+
+	//	Show all the player cooldowns
+	public void showCooldowns(@NotNull Player player) {
+		UUID playerUUID = player.getUniqueId();
+
+		if (cooldowns.containsKey(playerUUID)) {
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for the following commands:");
+			UtilsMessage.sendMessage(player, "&e-------------------------------------");
+			for (String command : cooldowns.get(playerUUID).keySet()) {
+				long remainingTime = cooldowns.get(playerUUID).get(command) - System.currentTimeMillis();
+				double remainingTimeInSeconds = remainingTime / 1000.0;
+
+
+				if (remainingTimeInSeconds < 60) {
+					UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTimeInSeconds) + "&e seconds for &c" + command + "&e.");
+				} else if (remainingTimeInSeconds < 3600) {
+					UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTimeInSeconds / 60) + "&e minutes for &c" + command + "&e.");
+				} else if (remainingTimeInSeconds < 86400) {
+					UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTimeInSeconds / 3600) + "&e hours for &c" + command + "&e.");
+				} else {
+					UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTimeInSeconds / 86400) + "&e days for &c" + command + "&e.");
+				}
+			}
+			UtilsMessage.sendMessage(player, "&e-------------------------------------");
 		}
 	}
 
