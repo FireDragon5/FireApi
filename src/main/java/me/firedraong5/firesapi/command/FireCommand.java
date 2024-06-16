@@ -65,7 +65,6 @@ public abstract class FireCommand extends BukkitCommand {
 		String param = args.length > 0 ? args[0] : "";
 		Method method = this.methods.get(param.toLowerCase());
 
-
 		if (method != null) {
 			if (method.isAnnotationPresent(Parameter.class)) {
 				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
@@ -75,12 +74,21 @@ public abstract class FireCommand extends BukkitCommand {
 					return true;
 				}
 				if (args.length < parameter.minArgs()) {
-					UtilsMessage.sendMessage(sender, ChatColor.RED + "Insufficient arguments. This command requires at least " + parameter.minArgs() + " arguments.");
+					UtilsMessage.sendMessage(sender, "&cInsufficient arguments. This command requires at least "
+							+ parameter.minArgs() + " arguments.");
+					return true;
+				}
+				if (parameter.checkConsole() && !(sender instanceof Player)) {
+					UtilsMessage.sendMessageConsole("You must be a player to use this command!");
+					return true;
+				}
+				if (!parameter.permission().isEmpty() && !sender.hasPermission(parameter.permission())) {
+					UtilsMessage.noPermissionMessage((Player) sender, parameter.permission(), false);
 					return true;
 				}
 			}
 		} else if (!param.isEmpty()) {
-			UtilsMessage.sendMessage(sender, ChatColor.RED + "Usage: /" + this.getName() +
+			UtilsMessage.sendMessage(sender, "&cUsage: /" + this.getName() +
 					" <" + this.methods.keySet().stream()
 					.filter(methodName -> !methodName.isEmpty())
 					.collect(Collectors.joining("|")) + ">");
@@ -106,6 +114,7 @@ public abstract class FireCommand extends BukkitCommand {
 
 		return true;
 	}
+
 	public abstract void execute(CommandSender sender, String[] args);
 
 	@Override
