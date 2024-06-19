@@ -28,4 +28,5 @@ public final class FiresApi extends JavaPlugin {
 	public static FiresApi getInstance() {
 		return instance;
     }
+
 }

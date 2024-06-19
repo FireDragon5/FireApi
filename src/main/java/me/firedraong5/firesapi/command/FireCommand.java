@@ -70,7 +70,7 @@ public abstract class FireCommand extends BukkitCommand {
 				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
 				if (parameter.requiresPlayer() && this.isPlayer()) {
 					assert sender instanceof Player;
-					UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
+					UtilsMessage.sendMessage((Player) sender, "&cYou must be a player to use this command!");
 					return true;
 				}
 				if (args.length < parameter.minArgs()) {
@@ -78,10 +78,7 @@ public abstract class FireCommand extends BukkitCommand {
 							+ parameter.minArgs() + " arguments.");
 					return true;
 				}
-				if (parameter.checkConsole() && !(sender instanceof Player)) {
-					UtilsMessage.sendMessageConsole("You must be a player to use this command!");
-					return true;
-				}
+
 				if (!parameter.permission().isEmpty() && !sender.hasPermission(parameter.permission())) {
 					UtilsMessage.noPermissionMessage((Player) sender, parameter.permission(), false);
 					return true;

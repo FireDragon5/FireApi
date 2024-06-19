@@ -17,7 +17,6 @@ public @interface Parameter {
 	//	@NotNull
 	boolean requiresPlayer() default false;
 
-	boolean checkConsole() default false;
 
 	String permission() default "";
 

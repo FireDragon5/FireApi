@@ -64,10 +64,16 @@ public class CooldownManager {
 		String permission = useSinglePermission ? singlePermission : cooldownByPassPermissions.get(command);
 
 		if (permission != null && (player.hasPermission(permission) || player.isOp())) {
-			return false;
+			return true;
 		}
 
-		return cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID).containsKey(command) && cooldowns.get(playerUUID).get(command) > System.currentTimeMillis();
+//		remove the player if the cooldown is >= 0
+		if (cooldowns.containsKey(playerUUID) && cooldowns.get(playerUUID).containsKey(command) && cooldowns.get(playerUUID).get(command) <= System.currentTimeMillis()) {
+			cooldowns.get(playerUUID).remove(command);
+		}
+
+
+		return !cooldowns.containsKey(playerUUID) || !cooldowns.get(playerUUID).containsKey(command) || cooldowns.get(playerUUID).get(command) <= System.currentTimeMillis();
 	}
 
 
@@ -108,6 +114,13 @@ public class CooldownManager {
 		UUID playerUUID = player.getUniqueId();
 		double remainingTime = getRemainingCooldownTime(player) / 1000.0; // Convert to seconds
 
+
+//		if the user are not in a hashmap return
+		if (!cooldowns.containsKey(playerUUID)) {
+			UtilsMessage.sendMessage(player, "&cNo cooldowns active");
+			return;
+		}
+
 		if (remainingTime < 60) {
 			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime) + "&e seconds.");
 		} else if (remainingTime < 3600) {
@@ -131,6 +144,14 @@ public class CooldownManager {
 				long remainingTime = cooldowns.get(playerUUID).get(command) - System.currentTimeMillis();
 				double remainingTimeInSeconds = remainingTime / 1000.0;
 
+
+//				if the cooldown is in the minus don't show it
+				if (remainingTimeInSeconds <= 0) {
+
+					UtilsMessage.sendMessage(player, "&eNo cooldowns active");
+
+					continue;
+				}
 
 				if (remainingTimeInSeconds < 60) {
 					UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTimeInSeconds) + "&e seconds for &c" + command + "&e.");
