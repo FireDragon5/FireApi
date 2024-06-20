@@ -11,7 +11,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class CooldownManager {
 	private final HashMap<UUID, HashMap<String, Long>> cooldowns = new HashMap<>();
-	private final HashMap<String, Long> cooldownTimesInMs = new HashMap<>();
+	private final HashMap<String, Long> cooldownTimes = new HashMap<>();
 	private final HashMap<String, String> cooldownByPassPermissions = new HashMap<>();
 
 	private String singlePermission;
@@ -31,8 +31,30 @@ public class CooldownManager {
 	}
 
 	// Set the cooldown time in milliseconds
-	public void setCooldownTimeInMs(String cooldownName, long cooldownTimeInMs) {
-		cooldownTimesInMs.put(cooldownName, cooldownTimeInMs);
+	public void setCooldownTime(String cooldownName, long cooldownTimeInMil) {
+
+		cooldownTimes.put(cooldownName, cooldownTimeInMil);
+	}
+
+	public void setCooldownTimeFromFile(String cooldownName, String cooldownTimeInString) {
+
+		long cooldownTime;
+
+//		When the user puts 3D or 3H in the config file convert the time to milliseconds
+		if (cooldownTimeInString.contains("D")) {
+			cooldownTime = Long.parseLong(cooldownTimeInString.replace("D", "")) * 86400000;
+		} else if (cooldownTimeInString.contains("H")) {
+			cooldownTime = Long.parseLong(cooldownTimeInString.replace("H", "")) * 3600000;
+		} else if (cooldownTimeInString.contains("M")) {
+			cooldownTime = Long.parseLong(cooldownTimeInString.replace("M", "")) * 60000;
+		} else if (cooldownTimeInString.contains("S")) {
+			cooldownTime = Long.parseLong(cooldownTimeInString.replace("S", "")) * 1000;
+		}else {
+			cooldownTime = Long.parseLong(cooldownTimeInString);
+		}
+
+
+		cooldownTimes.put(cooldownName, cooldownTime);
 	}
 
 	public void setCooldownByPassPermission(String permission, String command) {
@@ -56,7 +78,7 @@ public class CooldownManager {
 			cooldowns.put(playerUUID, new HashMap<>());
 		}
 
-		cooldowns.get(playerUUID).put(command, System.currentTimeMillis() + cooldownTimesInMs.get(command));
+		cooldowns.get(playerUUID).put(command, System.currentTimeMillis() + cooldownTimes.get(command));
 	}
 
 	public boolean isCooldownActive(Player player, String command) {
@@ -112,7 +134,7 @@ public class CooldownManager {
 	//	Cooldown message
 	public void sendCooldownMessage(Player player) {
 		UUID playerUUID = player.getUniqueId();
-		double remainingTime = getRemainingCooldownTime(player) / 1000.0; // Convert to seconds
+		double remainingTime = getRemainingCooldownTime(player) / 1000.0;
 
 
 //		if the user are not in a hashmap return
@@ -144,13 +166,6 @@ public class CooldownManager {
 				long remainingTime = cooldowns.get(playerUUID).get(command) - System.currentTimeMillis();
 				double remainingTimeInSeconds = remainingTime / 1000.0;
 
-
-//				if the cooldown is in the minus don't show it
-				if (!cooldowns.containsKey(playerUUID)) {
-					UtilsMessage.sendMessage(player, "&cNo cooldowns active");
-					return;
-				}
-
 				if (remainingTimeInSeconds < 60) {
 					UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTimeInSeconds) + "&e seconds for &c" + command + "&e.");
 				} else if (remainingTimeInSeconds < 3600) {
@@ -162,6 +177,9 @@ public class CooldownManager {
 				}
 			}
 			UtilsMessage.sendMessage(player, "&e-------------------------------------");
+		}else {
+			UtilsMessage.sendMessage(player, "&cNo cooldowns active");
+
 		}
 	}
 
