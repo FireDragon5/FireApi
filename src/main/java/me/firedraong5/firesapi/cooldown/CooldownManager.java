@@ -146,11 +146,9 @@ public class CooldownManager {
 
 
 //				if the cooldown is in the minus don't show it
-				if (remainingTimeInSeconds <= 0) {
-
-					UtilsMessage.sendMessage(player, "&eNo cooldowns active");
-
-					continue;
+				if (!cooldowns.containsKey(playerUUID)) {
+					UtilsMessage.sendMessage(player, "&cNo cooldowns active");
+					return;
 				}
 
 				if (remainingTimeInSeconds < 60) {
