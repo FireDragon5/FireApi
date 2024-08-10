@@ -22,6 +22,19 @@ import java.util.*;
 public class UtilsMessage implements Listener {
 
 	static Map<UUID, List<String>> delayMessage = new HashMap<>();
+	private static final Map<String, Object> placeholders = new HashMap<>();
+
+	public static void addPlaceholder(String placeholder, Object value) {
+		placeholders.put(placeholder, value);
+	}
+
+	public static String replacePlaceholders(String message, Player player) {
+		addPlaceholder("%player%", player.displayName());
+		for (Map.Entry<String, Object> entry : placeholders.entrySet()) {
+			message = message.replace(entry.getKey(), entry.getValue().toString());
+		}
+		return message;
+	}
 
 	/**
 	 * Send a message to the player
@@ -77,8 +90,10 @@ public class UtilsMessage implements Listener {
 	}
 
 	//	Message list send to the player
-	public static void sendMessage(Player player, List<String> message) {
-		UtilsMessage.sendMessage(player, message);
+	public static void sendMessage(Player player, List<String> messages) {
+		for (String message : messages) {
+			sendMessage(player, message);
+		}
 	}
 
 	//	Offline player message this message will send to the player as soon as they join the server
