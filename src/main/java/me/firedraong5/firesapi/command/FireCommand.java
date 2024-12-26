@@ -29,6 +29,9 @@ public abstract class FireCommand extends BukkitCommand {
 
 	private CommandSender sender;
 
+	public abstract void execute(CommandSender sender, String[] args);
+
+
 	public final Map<String, Method> methods = new HashMap<>();
 
 	public FireCommand(@NotNull String command,
@@ -54,68 +57,73 @@ public abstract class FireCommand extends BukkitCommand {
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-
-
 	}
-
 
 	@Override
 	public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
 		this.sender = sender;
+
+		// If no @Parameter methods are found, call the abstract execute method
+		if (this.methods.isEmpty()) {
+			this.execute(sender, args);
+			return true;
+		}
+
 		String param = args.length > 0 ? args[0] : "";
 		Method method = this.methods.get(param.toLowerCase());
 
 		if (method != null) {
-			if (method.isAnnotationPresent(Parameter.class)) {
-				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
+			Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
 
-				if (parameter.requiresPlayer() && this.isPlayer()) {
-					assert sender instanceof Player;
-					UtilsMessage.sendMessage((Player) sender, "&cYou must be a player to use this command!");
-					return true;
-				}
-
-				if (args.length < parameter.minArgs()) {
-					UtilsMessage.sendMessage(sender, "&cInsufficient arguments. This command requires at least "
-							+ parameter.minArgs() + " arguments.");
-					return true;
-				}
-
-				if (!parameter.permission().isEmpty() && !sender.hasPermission(parameter.permission())) {
-					UtilsMessage.noPermissionMessage((Player) sender, parameter.permission(), false);
-					return true;
-				}
-			}
-		}
-
-		if (method == null) {
-			try {
-				this.execute(sender, args);
+			if (!validateArgs(parameter, sender, args)) {
 				return true;
+			}
+
+			try {
+				method.invoke(this, sender, args);
 			} catch (Exception e) {
+				sender.sendMessage(ChatColor.RED + "An error occurred while executing this command.");
 				e.printStackTrace();
 			}
 			return true;
 		}
 
-		// If permission is required at the base level
-		if (this.getPermission() != null && !sender.hasPermission(this.getPermission())) {
-			assert sender instanceof Player;
-			UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
-			return true;
+		if (param.isEmpty()) {
+			defaultExecute(sender, args);
+		} else {
+			sendUsageMessage(sender);
 		}
-
-		try {
-			method.invoke(this, sender, args);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		return true;
 	}
 
+	// Validates all argument and permission requirements for subcommands
+	private boolean validateArgs(Parameter parameter, CommandSender sender, String[] args) {
+		if (parameter.requiresPlayer() && !(sender instanceof Player)) {
+			sender.sendMessage(ChatColor.RED + "You must be a player to use this command!");
+			return false;
+		}
+		if (args.length < parameter.minArgs()) {
+			sender.sendMessage(ChatColor.RED + "Insufficient arguments. Requires at least "
+					+ parameter.minArgs() + " arguments.");
+			return false;
+		}
+		if (!parameter.permission().isEmpty() && !sender.hasPermission(parameter.permission())) {
+			sender.sendMessage(ChatColor.RED + "You lack permission: " + parameter.permission());
+			return false;
+		}
+		return true;
+	}
 
-	public abstract void execute(CommandSender sender, String[] args);
+	// Fallback execution if no subcommand is specified
+	protected void defaultExecute(CommandSender sender, String[] args) {
+		sender.sendMessage(ChatColor.YELLOW + "Default command logic executed.");
+	}
+
+	// Shows usage message if subcommand is invalid
+	private void sendUsageMessage(CommandSender sender) {
+		sender.sendMessage(ChatColor.RED + "Unknown subcommand. Usage: /" + this.getName() +
+				" <" + String.join("|", this.methods.keySet()) + ">");
+	}
 
 	@Override
 	public @NotNull List<String> tabComplete(@NotNull CommandSender sender,
@@ -123,11 +131,10 @@ public abstract class FireCommand extends BukkitCommand {
 			throws IllegalArgumentException {
 		if (args.length == 1) {
 			return this.methods.keySet().stream()
-					.filter(methodName -> !methodName.isEmpty())
+					.filter(methodName -> methodName.startsWith(args[0].toLowerCase()))
 					.collect(Collectors.toList());
 		}
-
-		return onTabComplete(sender, args);
+		return Collections.emptyList();
 	}
 
 	public abstract List<String> onTabComplete(CommandSender sender, String[] args);
@@ -163,9 +170,10 @@ public abstract class FireCommand extends BukkitCommand {
 
 	//	Method to print all the methods found in the class
 	public void printMethods() {
-		this.methods.forEach((key, value) -> {
-			System.out.println(key + " : " + value.getName());
-		});
+		Bukkit.getLogger().info("Registered Commands:");
+		this.methods.forEach((key, value) ->
+				Bukkit.getLogger().info("Subcommand: " + key + " -> Method: " + value.getName())
+		);
 	}
 
 

@@ -8,17 +8,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Parameter {
-
-	//	@NotNull
 	String value();
-
-
 	int minArgs() default 0;
-	//	@NotNull
 	boolean requiresPlayer() default false;
-
-
 	String permission() default "";
-
-
 }
+
