@@ -68,11 +68,13 @@ public abstract class FireCommand extends BukkitCommand {
 		if (method != null) {
 			if (method.isAnnotationPresent(Parameter.class)) {
 				Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
+
 				if (parameter.requiresPlayer() && this.isPlayer()) {
 					assert sender instanceof Player;
 					UtilsMessage.sendMessage((Player) sender, "&cYou must be a player to use this command!");
 					return true;
 				}
+
 				if (args.length < parameter.minArgs()) {
 					UtilsMessage.sendMessage(sender, "&cInsufficient arguments. This command requires at least "
 							+ parameter.minArgs() + " arguments.");
@@ -84,14 +86,19 @@ public abstract class FireCommand extends BukkitCommand {
 					return true;
 				}
 			}
-		} else if (!param.isEmpty()) {
-			UtilsMessage.sendMessage(sender, "&cUsage: /" + this.getName() +
-					" <" + this.methods.keySet().stream()
-					.filter(methodName -> !methodName.isEmpty())
-					.collect(Collectors.joining("|")) + ">");
+		}
+
+		if (method == null) {
+			try {
+				this.execute(sender, args);
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 
+		// If permission is required at the base level
 		if (this.getPermission() != null && !sender.hasPermission(this.getPermission())) {
 			assert sender instanceof Player;
 			UtilsMessage.noPermissionMessage((Player) sender, this.getPermission());
@@ -99,18 +106,14 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 
 		try {
-			if (method != null) {
-				method.invoke(this, sender, args);
-			} else {
-				this.execute(sender, args);
-			}
-			return true;
+			method.invoke(this, sender, args);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return true;
 	}
+
 
 	public abstract void execute(CommandSender sender, String[] args);
 
