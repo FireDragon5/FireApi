@@ -11,7 +11,6 @@ me\firedraong5\firesapi\menu\FireMenu.class
 me\firedraong5\firesapi\utils\PlayerUtils.class
 me\firedraong5\firesapi\menu\Menu$1.class
 me\firedraong5\firesapi\annotation\Parameter.class
-me\firedraong5\firesapi\fileManager\FireManager.class
 me\firedraong5\firesapi\utils\UtilsMessage.class
 me\firedraong5\firesapi\menu\Menu.class
 me\firedraong5\firesapi\itemCreation\CustomItemCreator.class
