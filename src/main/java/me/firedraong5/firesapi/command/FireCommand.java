@@ -115,7 +115,7 @@ public abstract class FireCommand extends BukkitCommand {
 
 	// Fallback execution if no subcommand is specified
 	protected void defaultExecute(CommandSender sender, String[] args) {
-		sender.sendMessage(ChatColor.YELLOW + "Default command logic executed.");
+		this.execute(sender, args);
 	}
 
 	// Shows usage message if subcommand is invalid
