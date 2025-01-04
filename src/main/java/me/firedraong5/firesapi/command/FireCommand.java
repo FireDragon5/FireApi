@@ -130,7 +130,11 @@ public abstract class FireCommand extends BukkitCommand {
 			throws IllegalArgumentException {
 		if (args.length == 1) {
 			return this.methods.keySet().stream()
-					.filter(methodName -> !methodName.isEmpty())
+					.filter(methodName -> {
+						Method method = this.methods.get(methodName);
+						Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
+						return parameter.permission().isEmpty() || sender.hasPermission(parameter.permission());
+					})
 					.collect(Collectors.toList());
 		}
 
