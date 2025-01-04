@@ -12,5 +12,7 @@ public @interface Parameter {
 	int minArgs() default 0;
 	boolean requiresPlayer() default false;
 	String permission() default "";
+
+	boolean showInArgs() default true;
 }
 

@@ -133,13 +133,14 @@ public abstract class FireCommand extends BukkitCommand {
 					.filter(methodName -> {
 						Method method = this.methods.get(methodName);
 						Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
-						return parameter.permission().isEmpty() || sender.hasPermission(parameter.permission());
+						return parameter.showInArgs() &&
+								(parameter.permission().isEmpty() || sender.hasPermission(parameter.permission()));
 					})
 					.collect(Collectors.toList());
 		}
-
 		return onTabComplete(sender, args);
 	}
+
 
 	public abstract List<String> onTabComplete(CommandSender sender, String[] args);
 
