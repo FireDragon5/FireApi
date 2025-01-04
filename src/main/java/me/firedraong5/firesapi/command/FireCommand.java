@@ -89,8 +89,6 @@ public abstract class FireCommand extends BukkitCommand {
 
 		if (param.isEmpty()) {
 			defaultExecute(sender, args);
-		} else {
-			sendUsageMessage(sender);
 		}
 		return true;
 	}
@@ -118,12 +116,6 @@ public abstract class FireCommand extends BukkitCommand {
 		this.execute(sender, args);
 	}
 
-	// Shows usage message if subcommand is invalid
-	private void sendUsageMessage(CommandSender sender) {
-		sender.sendMessage(ChatColor.RED + "Unknown subcommand. Usage: /" + this.getName() +
-				" <" + String.join("|", this.methods.keySet()) + ">");
-	}
-
 	@Override
 	public @NotNull List<String> tabComplete(@NotNull CommandSender sender,
 											 @NotNull String alias, @NotNull String[] args)
@@ -133,8 +125,7 @@ public abstract class FireCommand extends BukkitCommand {
 					.filter(methodName -> {
 						Method method = this.methods.get(methodName);
 						Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
-						return parameter.showInArgs() &&
-								(parameter.permission().isEmpty() || sender.hasPermission(parameter.permission()));
+						return parameter.showInArgs();
 					})
 					.collect(Collectors.toList());
 		}
