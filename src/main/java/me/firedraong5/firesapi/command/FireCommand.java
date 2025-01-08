@@ -120,16 +120,26 @@ public abstract class FireCommand extends BukkitCommand {
 	public @NotNull List<String> tabComplete(@NotNull CommandSender sender,
 											 @NotNull String alias, @NotNull String[] args)
 			throws IllegalArgumentException {
+		if (this.methods.isEmpty()) {
+			return this.onTabComplete(sender, args);
+		}
+
 		if (args.length == 1) {
 			return this.methods.keySet().stream()
-					.filter(methodName -> {
-						Method method = this.methods.get(methodName);
-						Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
-						return parameter.showInArgs();
-					})
+					.filter(s -> s.startsWith(args[0].toLowerCase()))
 					.collect(Collectors.toList());
 		}
-		return onTabComplete(sender, args);
+
+		String param = args[0].toLowerCase();
+		Method method = this.methods.get(param);
+		if (method != null) {
+			Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
+			if (parameter != null) {
+				return this.onTabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
+			}
+		}
+
+		return Collections.emptyList();
 	}
 
 
