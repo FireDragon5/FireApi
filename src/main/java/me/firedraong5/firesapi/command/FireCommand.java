@@ -130,18 +130,8 @@ public abstract class FireCommand extends BukkitCommand {
 					.collect(Collectors.toList());
 		}
 
-		String param = args[0].toLowerCase();
-		Method method = this.methods.get(param);
-		if (method != null) {
-			Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
-			if (parameter != null) {
-				return this.onTabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
-			}
-		}
-
 		return Collections.emptyList();
 	}
-
 
 	public abstract List<String> onTabComplete(CommandSender sender, String[] args);
 
