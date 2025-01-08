@@ -123,6 +123,7 @@ public abstract class FireCommand extends BukkitCommand {
 		if (args.length == 1) {
 			return this.methods.keySet().stream()
 					.filter(methodName -> !methodName.isEmpty())
+					.filter(methodName -> methodName.startsWith(args[0].toLowerCase()))
 					.collect(Collectors.toList());
 		}
 
