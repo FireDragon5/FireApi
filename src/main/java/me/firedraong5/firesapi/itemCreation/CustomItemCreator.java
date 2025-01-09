@@ -2,7 +2,9 @@ package me.firedraong5.firesapi.itemCreation;
 
 import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -145,6 +147,23 @@ public static ItemMeta getItemMeta(@NotNull ItemStack item) {
 		meta.setDisplayName(UtilsMessage.onChat(name));
 		meta.setLore(UtilsMessage.onChat(lore));
 		item.setItemMeta(meta);
+		return item;
+	}
+
+	public static @NotNull ItemStack createItem(Material material, int amount, String name, List<String> lore, boolean glow) {
+		ItemStack item = new ItemStack(material, amount);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(UtilsMessage.onChat(name));
+		meta.setLore(UtilsMessage.onChat(lore));
+
+		if (glow) {
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			item.setItemMeta(meta);
+			item.addUnsafeEnchantment(Enchantment.MENDING, 1);
+		} else {
+			item.setItemMeta(meta);
+		}
+
 		return item;
 	}
 

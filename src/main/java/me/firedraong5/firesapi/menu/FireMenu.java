@@ -52,7 +52,6 @@ public class FireMenu {
 		return this.getClass().getSimpleName();
 	}
 
-
 	/**
 	 * Create a new menu
 	 */
@@ -169,9 +168,21 @@ public class FireMenu {
 		ItemStack item = CustomItemCreator.createItem(material, amount, name, lore);
 	}
 
+	/**
+	 * Set the inventory
+	 *
+	 * @param slot Slot to set the item
+	 * @param material Material of the item
+	 * @param name Name of the item
+	 * @param lore Lore of the item
+	 * @param glow Glow of the item
+	 */
+	public void setItemGlow(int slot, Material material, String name, List<String> lore, boolean glow) {
 
+		ItemStack item = CustomItemCreator.createItem(material, 1, name, lore, glow);
 
-
+		inventory.setItem(slot, item);
+	}
 
 
 	/**
@@ -284,10 +295,7 @@ public class FireMenu {
 				inventory.setItem(slotNumber, item);
 			}
 		}
-
-
 	}
-
 
 	/**
 	 * Add a player head to the inventory
@@ -301,7 +309,6 @@ public class FireMenu {
 		ItemStack item = getPlayerHead(player, name);
 
 		inventory.setItem(slot, item);
-
 	}
 
 
@@ -319,7 +326,6 @@ public class FireMenu {
 		ItemStack item = getPlayerHead(player, name, lore);
 
 		inventory.setItem(slot, item);
-
 	}
 
 
@@ -334,8 +340,6 @@ public class FireMenu {
 		ItemStack item = getPlayerHead(player, name, lore);
 
 		inventory.addItem(item);
-
-
 	}
 
 	/**
@@ -348,13 +352,10 @@ public class FireMenu {
 	 */
 
 	public void getAllPlayerHeads(Player player, @Nullable String name, @NotNull List<String> lore, int slot) {
-
 		ItemStack item = getPlayerHead(player, name, lore);
 
 		inventory.setItem(slot, item);
-
 	}
-
 
 	/**
 	 * Get all the online players heads in the server
@@ -366,7 +367,6 @@ public class FireMenu {
 		ItemStack item = getPlayerHead(player, name);
 
 		inventory.addItem(item);
-
 	}
 
 
@@ -424,14 +424,10 @@ public class FireMenu {
 		return item;
 	}
 
-
 	//	Display a menu info item
 	public void displayMenuInfo(int slot, Material material, String name, List<String> lore) {
 		ItemStack item = CustomItemCreator.createItem(material, 1, name, lore);
 
 		inventory.setItem(slot, item);
 	}
-
-
-
 }
