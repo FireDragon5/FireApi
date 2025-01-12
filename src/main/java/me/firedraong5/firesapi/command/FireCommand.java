@@ -121,6 +121,13 @@ public abstract class FireCommand extends BukkitCommand {
 											 @NotNull String alias, @NotNull String[] args)
 			throws IllegalArgumentException {
 
+		if (args.length == 0) {
+			// Return all online player names if no arguments are provided
+			return Bukkit.getOnlinePlayers().stream()
+					.map(Player::getName)
+					.collect(Collectors.toList());
+		}
+
 		if (args.length == 1) {
 			List<String> baseCompletions = this.methods.keySet().stream()
 					.filter(methodName -> !methodName.isEmpty())
@@ -131,9 +138,21 @@ public abstract class FireCommand extends BukkitCommand {
 			return filterByRank(sender, baseCompletions);
 		}
 
+		// Check if the current argument corresponds to a method with showPlayerNames > 0
+		String param = args[0].toLowerCase();
+		Method method = this.methods.get(param);
+		if (method != null) {
+			Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
+			if (parameter.showPlayerNames() > 0) {
+				return Bukkit.getOnlinePlayers().stream()
+						.map(Player::getName)
+						.filter(name -> name.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
+						.collect(Collectors.toList());
+			}
+		}
+
 		return onTabComplete(sender, args);
 	}
-
 	// New method to filter by rank
 	protected List<String> filterByRank(CommandSender sender, List<String> completions) {
 		return completions;

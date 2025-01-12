@@ -14,5 +14,7 @@ public @interface Parameter {
 	String permission() default "";
 
 	boolean showInArgs() default true;
+
+	int showPlayerNames() default 0;
 }
 
