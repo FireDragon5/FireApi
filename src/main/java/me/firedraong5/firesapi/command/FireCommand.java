@@ -115,7 +115,6 @@ public abstract class FireCommand extends BukkitCommand {
 	protected void defaultExecute(CommandSender sender, String[] args) {
 		this.execute(sender, args);
 	}
-
 	@Override
 	public @NotNull List<String> tabComplete(@NotNull CommandSender sender,
 											 @NotNull String alias, @NotNull String[] args)
@@ -138,12 +137,13 @@ public abstract class FireCommand extends BukkitCommand {
 			return filterByRank(sender, baseCompletions);
 		}
 
-		// Check if the current argument corresponds to a method with showPlayerNames > 0
+		// Check if the first argument matches a method with showPlayerNames > 0
 		String param = args[0].toLowerCase();
 		Method method = this.methods.get(param);
 		if (method != null) {
 			Parameter parameter = method.getDeclaredAnnotation(Parameter.class);
 			if (parameter.showPlayerNames() > 0) {
+				// Return player names matching the last argument
 				return Bukkit.getOnlinePlayers().stream()
 						.map(Player::getName)
 						.filter(name -> name.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
@@ -151,8 +151,10 @@ public abstract class FireCommand extends BukkitCommand {
 			}
 		}
 
+		// Fall back to sub-class tab completion
 		return onTabComplete(sender, args);
 	}
+
 	// New method to filter by rank
 	protected List<String> filterByRank(CommandSender sender, List<String> completions) {
 		return completions;

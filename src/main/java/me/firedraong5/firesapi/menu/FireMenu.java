@@ -18,8 +18,11 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 
 @SuppressWarnings("unused")
@@ -27,6 +30,7 @@ public class FireMenu {
 
 	private final Player player;
 	private final Inventory inventory;
+	private final Map<Integer, Consumer<Player>> clickActions = new HashMap<>();
 
 	private String title = "Menu";
 	private int size = 9;
@@ -40,16 +44,13 @@ public class FireMenu {
 	 * @param size   Size of the menu
 	 */
 	public FireMenu(Player player, String name, int size) {
+		if (size <= 0 || size % 9 != 0 || size > 54) {
+			throw new IllegalArgumentException("Size must be a multiple of 9 and between 9 and 54.");
+		}
 		this.player = player;
 		this.title = name;
 		this.size = size;
-
 		this.inventory = Bukkit.createInventory(player, size, Component.text(UtilsMessage.onChat(name)));
-	}
-
-	//	Get the class name
-	private String getClassName() {
-		return this.getClass().getSimpleName();
 	}
 
 	/**
@@ -125,7 +126,6 @@ public class FireMenu {
 		inventory.setItem(slot, item);
 	}
 
-
 	/**
 	 * Set the inventory
 	 *
@@ -134,9 +134,7 @@ public class FireMenu {
 	 * @param name     Name of the item
 	 */
 	public void setItem(int slot, Material material, String name) {
-
 		ItemStack item = CustomItemCreator.createItem(material, 1, name);
-
 
 		inventory.setItem(slot, item);
 	}
@@ -148,11 +146,13 @@ public class FireMenu {
 	 * @param name Name of the item
 	 * @param lore Lore of the item
 	 */
-	public void setItem(int slot, Material material, String name, List<String> lore) {
-
+	public FireMenu setItem(int slot, Material material, String name, List<String> lore) {
+		if (slot < 0 || slot >= size) {
+			throw new IllegalArgumentException("Slot is out of bounds.");
+		}
 		ItemStack item = CustomItemCreator.createItem(material, 1, name, lore);
-
 		inventory.setItem(slot, item);
+		return this;
 	}
 
 	/**
@@ -178,9 +178,7 @@ public class FireMenu {
 	 * @param glow Glow of the item
 	 */
 	public void setItemGlow(int slot, Material material, String name, List<String> lore, boolean glow) {
-
 		ItemStack item = CustomItemCreator.createItem(material, 1, name, lore, glow);
-
 		inventory.setItem(slot, item);
 	}
 
@@ -212,64 +210,27 @@ public class FireMenu {
 
 	}
 
-	/**
-	 * Make the rest of the gui look like glass
-	 *
-	 * @param material Material of the glass
-	 * - If null it will be black stained-glass
-	 */
-	public void glass(@Nullable Material material) {
-
+	public void fillGlass(@Nullable Material material, @Nullable String name, boolean isBorder) {
 		if (material == null) {
 			material = Material.BLACK_STAINED_GLASS_PANE;
 		}
-
 		ItemStack item = new ItemStack(material);
 		ItemMeta meta = item.getItemMeta();
-
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		if (name != null) {
+			meta.setDisplayName(UtilsMessage.onChat(name));
+		}
+		item.setItemMeta(meta);
 
 		for (int i = 0; i < size; i++) {
-			meta.setDisplayName(UtilsMessage.onChat("&e"));
-			item.setItemMeta(meta);
-			if (item.getType() == Material.AIR || inventory.getItem(i) == null) {
-				inventory.setItem(i, item);
-			}
-		}
-
-	}
-
-
-	/**
-	 * Place the glass in a border of the gui
-	 *
-	 * @param material Material of the glass
-	 * - If null it will be black stained-glass
-	 */
-	public void borderGlass(@Nullable Material material) {
-
-		if (material == null) {
-			material = Material.BLACK_STAINED_GLASS_PANE;
-		}
-
-		ItemStack item = new ItemStack(material);
-		ItemMeta meta = item.getItemMeta();
-
-
-		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-
-		for (int i = 0; i < size; i++) {
-			if (i < 9 || i > size - 9 || i % 9 == 0 || i % 9 == 8) {
-				meta.setDisplayName(UtilsMessage.onChat("&e"));
-				item.setItemMeta(meta);
-				if (item.getType() == Material.AIR || inventory.getItem(i) == null) {
+			boolean isSlotBorder = (i < 9 || i >= size - 9 || i % 9 == 0 || i % 9 == 8);
+			if ((isBorder && isSlotBorder) || (!isBorder && !isSlotBorder)) {
+				if (inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) {
 					inventory.setItem(i, item);
 				}
 			}
 		}
-
 	}
-
 
 //	Methods where the user can place the glass pane
 
@@ -306,7 +267,7 @@ public class FireMenu {
 	 */
 	public void addPlayerHead(Player player, @Nullable String name, int slot) {
 
-		ItemStack item = getPlayerHead(player, name);
+		ItemStack item = getPlayerHead(player, name, null);
 
 		inventory.setItem(slot, item);
 	}
@@ -364,7 +325,7 @@ public class FireMenu {
 	 */
 	public void getAllPlayerHeads(Player player, @Nullable String name) {
 
-		ItemStack item = getPlayerHead(player, name);
+		ItemStack item = getPlayerHead(player, name, null);
 
 		inventory.addItem(item);
 	}
@@ -376,53 +337,25 @@ public class FireMenu {
 	 * @param lore Lore of the head
 	 * @return ItemStack
 	 */
-	public @NotNull ItemStack getPlayerHead(Player player, @Nullable String name, @NotNull List<String> lore) {
+	private @NotNull ItemStack getPlayerHead(Player player, @Nullable String name, @Nullable List<String> lore) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
 
-		if (name == null)
-			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
+		String displayName = name != null
+				? UtilsMessage.onChat(name.replace("%player%", player.getName()))
+				: UtilsMessage.onChat(player.getName());
+		meta.displayName(Component.text(displayName));
 
-		else if (name.contains("%player%"))
-			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
-
-		else
-			meta.displayName(Component.text(UtilsMessage.onChat(name)));
-
-		meta.setLore(UtilsMessage.onChat(lore));
+		if (lore != null) {
+			meta.setLore(UtilsMessage.onChat(lore));
+		}
 
 		meta.setOwningPlayer(player);
-
 		item.setItemMeta(meta);
+
 		return item;
 	}
 
-
-	/**
-	 * @param player Player to get the head
-	 * @param name Name of the head (null = player name)
-	 * @return ItemStack
-	 */
-	@NotNull
-	ItemStack getPlayerHead(Player player, @Nullable String name) {
-		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-		SkullMeta meta = (SkullMeta) item.getItemMeta();
-
-		if (name == null)
-			meta.displayName(Component.text(UtilsMessage.onChat(player.getName())));
-
-		else if (name.contains("%player%"))
-			meta.displayName(Component.text(UtilsMessage.onChat(name.replace("%player%", player.getName()))));
-
-		else
-			meta.displayName(Component.text(UtilsMessage.onChat(name)));
-
-
-		meta.setOwningPlayer(player);
-
-		item.setItemMeta(meta);
-		return item;
-	}
 
 	//	Display a menu info item
 	public void displayMenuInfo(int slot, Material material, String name, List<String> lore) {
