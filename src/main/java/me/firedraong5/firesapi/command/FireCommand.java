@@ -7,16 +7,30 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class FireCommand extends BukkitCommand {
 
-	public FireCommand(@NotNull String command, @NotNull String description, String... aliases) {
+	private final List<String> allAliases;
+	private final String permissionErrorMessage;
+	private final String playerOnlyErrorMessage;
+
+	public FireCommand(@NotNull String command, String[] aliases, @NotNull String description,
+					   @Nullable String permissionErrorMessage, @Nullable String playerOnlyErrorMessage) {
 		super(command);
 		setDescription(description);
-		setAliases(Arrays.asList(aliases));
+
+		this.allAliases = new ArrayList<>(List.of(command));
+		if (aliases != null) {
+			this.allAliases.addAll(Arrays.asList(aliases));
+			setAliases(Arrays.asList(aliases));
+		}
+
+		this.permissionErrorMessage = permissionErrorMessage != null ? permissionErrorMessage : "You don't have permission to execute this command.";
+		this.playerOnlyErrorMessage = playerOnlyErrorMessage != null ? playerOnlyErrorMessage : "This command can only be executed by players.";
 	}
 
 	protected abstract void executeCommand(CommandSender sender, String[] args);
@@ -30,7 +44,7 @@ public abstract class FireCommand extends BukkitCommand {
 		} catch (CommandException e) {
 			sender.sendMessage(ChatColor.RED + e.getMessage());
 		} catch (Exception e) {
-			sender.sendMessage(ChatColor.RED + "An error occurred while executing the command.");
+			sender.sendMessage(ChatColor.RED + "An unexpected error occurred while executing the command.");
 			e.printStackTrace();
 		}
 		return true;
@@ -41,13 +55,23 @@ public abstract class FireCommand extends BukkitCommand {
 		return tabCompleteCommand(sender, args);
 	}
 
+	public List<String> getAllAliases() {
+		return allAliases;
+	}
+
 	protected boolean isPlayer(CommandSender sender) {
 		return sender instanceof Player;
 	}
 
 	protected void requirePlayer(CommandSender sender) {
 		if (!isPlayer(sender)) {
-			throw new CommandException("This command can only be executed by players.");
+			throw new CommandException(playerOnlyErrorMessage);
+		}
+	}
+
+	protected void checkPermission(CommandSender sender, String permission) {
+		if (permission != null && !permission.isEmpty() && !sender.hasPermission(permission)) {
+			throw new CommandException(permissionErrorMessage);
 		}
 	}
 
