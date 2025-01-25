@@ -17,12 +17,14 @@ import java.util.stream.Collectors;
 public abstract class FireCommand extends BukkitCommand {
 
 	private final List<String> allAliases;
+	private final String permission;
 	private final String permissionErrorMessage;
 	private final String playerOnlyErrorMessage;
 	private static CommandMap commandMap;
 
 	public FireCommand(@NotNull String command, String[] aliases, @NotNull String description,
-					   @Nullable String permissionErrorMessage, @Nullable String playerOnlyErrorMessage) {
+					   @Nullable String permission, @Nullable String permissionErrorMessage,
+					   @Nullable String playerOnlyErrorMessage) {
 		super(command);
 		setDescription(description);
 
@@ -32,7 +34,7 @@ public abstract class FireCommand extends BukkitCommand {
 			setAliases(Arrays.asList(aliases));
 		}
 
-
+		this.permission = permission;
 		this.permissionErrorMessage = permissionErrorMessage != null ? permissionErrorMessage : "You don't have permission to execute this command.";
 		this.playerOnlyErrorMessage = playerOnlyErrorMessage != null ? playerOnlyErrorMessage : "This command can only be executed by players.";
 
@@ -46,6 +48,9 @@ public abstract class FireCommand extends BukkitCommand {
 	@Override
 	public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
 		try {
+			if (permission != null && !permission.isEmpty()) {
+				checkPermission(sender, permission); // Automatically check permission if defined
+			}
 			executeCommand(sender, args);
 		} catch (CommandException e) {
 			sender.sendMessage(ChatColor.RED + e.getMessage());
@@ -77,6 +82,7 @@ public abstract class FireCommand extends BukkitCommand {
 			return null;
 		}
 	}
+
 	@Override
 	public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
 		return tabCompleteCommand(sender, args);
