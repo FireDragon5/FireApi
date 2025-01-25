@@ -35,6 +35,7 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 
 		this.permission = permission;
+		setPermission(permission);
 		this.permissionErrorMessage = permissionErrorMessage != null ? permissionErrorMessage : "You don't have permission to execute this command.";
 		this.playerOnlyErrorMessage = playerOnlyErrorMessage != null ? playerOnlyErrorMessage : "This command can only be executed by players.";
 
@@ -49,7 +50,7 @@ public abstract class FireCommand extends BukkitCommand {
 	public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
 		try {
 			if (permission != null && !permission.isEmpty()) {
-				checkPermission(sender, permission); // Automatically check permission if defined
+				checkPermission(sender, permission);
 			}
 			executeCommand(sender, args);
 		} catch (CommandException e) {
