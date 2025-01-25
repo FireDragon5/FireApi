@@ -85,6 +85,9 @@ public abstract class FireCommand extends BukkitCommand {
 
 	@Override
 	public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
+		if (permission != null && !sender.hasPermission(permission)) {
+			return Collections.emptyList(); // Restrict visibility of tab completion if permission is missing
+		}
 		return tabCompleteCommand(sender, args);
 	}
 
@@ -113,5 +116,10 @@ public abstract class FireCommand extends BukkitCommand {
 				.map(Player::getName)
 				.filter(name -> name.toLowerCase().startsWith(prefix.toLowerCase()))
 				.collect(Collectors.toList());
+	}
+
+	public boolean canSenderView(CommandSender sender) {
+		// Check if the sender can view the command based on permissions
+		return permission == null || sender.hasPermission(permission);
 	}
 }
