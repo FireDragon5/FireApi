@@ -32,6 +32,7 @@ public abstract class FireCommand extends BukkitCommand {
 			setAliases(Arrays.asList(aliases));
 		}
 
+
 		this.permissionErrorMessage = permissionErrorMessage != null ? permissionErrorMessage : "You don't have permission to execute this command.";
 		this.playerOnlyErrorMessage = playerOnlyErrorMessage != null ? playerOnlyErrorMessage : "This command can only be executed by players.";
 
