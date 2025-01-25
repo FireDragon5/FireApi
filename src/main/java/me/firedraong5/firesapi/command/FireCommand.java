@@ -3,12 +3,14 @@ package me.firedraong5.firesapi.command;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,7 @@ public abstract class FireCommand extends BukkitCommand {
 	private final List<String> allAliases;
 	private final String permissionErrorMessage;
 	private final String playerOnlyErrorMessage;
+	private static CommandMap commandMap;
 
 	public FireCommand(@NotNull String command, String[] aliases, @NotNull String description,
 					   @Nullable String permissionErrorMessage, @Nullable String playerOnlyErrorMessage) {
@@ -31,6 +34,8 @@ public abstract class FireCommand extends BukkitCommand {
 
 		this.permissionErrorMessage = permissionErrorMessage != null ? permissionErrorMessage : "You don't have permission to execute this command.";
 		this.playerOnlyErrorMessage = playerOnlyErrorMessage != null ? playerOnlyErrorMessage : "This command can only be executed by players.";
+
+		registerCommand(this);
 	}
 
 	protected abstract void executeCommand(CommandSender sender, String[] args);
@@ -50,6 +55,27 @@ public abstract class FireCommand extends BukkitCommand {
 		return true;
 	}
 
+	private static void registerCommand(BukkitCommand command) {
+		if (commandMap == null) {
+			commandMap = getCommandMap();
+		}
+		if (commandMap != null) {
+			commandMap.register(command.getLabel(), command);
+		} else {
+			Bukkit.getLogger().severe("Failed to register command: " + command.getLabel());
+		}
+	}
+
+	private static CommandMap getCommandMap() {
+		try {
+			Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+			commandMapField.setAccessible(true);
+			return (CommandMap) commandMapField.get(Bukkit.getServer());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	@Override
 	public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
 		return tabCompleteCommand(sender, args);
