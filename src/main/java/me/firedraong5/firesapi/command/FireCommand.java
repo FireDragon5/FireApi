@@ -58,7 +58,7 @@ public abstract class FireCommand extends BukkitCommand {
 				CooldownManager cooldownManager = CooldownManager.getInstance();
 
 				if (cooldownManager.isCooldownActive(player, commandLabel)) {
-					cooldownManager.sendCooldownMessage(player);
+					cooldownManager.sendCooldownMessage(player, commandLabel);
 					return true;
 				}
 

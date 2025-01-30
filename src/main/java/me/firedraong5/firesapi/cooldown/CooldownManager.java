@@ -132,28 +132,24 @@ public class CooldownManager {
 	}
 
 	//	Cooldown message
-	public void sendCooldownMessage(Player player) {
+	public void sendCooldownMessage(Player player, String command) {
 		UUID playerUUID = player.getUniqueId();
-		double remainingTime = getRemainingCooldownTime(player) / 1000.0;
+		double remainingTime = getRemainingCooldownTime(player, command) / 1000.0;
 
-
-//		if the user are not in a hashmap return
-		if (!cooldowns.containsKey(playerUUID)) {
-			UtilsMessage.sendMessage(player, "&cNo cooldowns active");
+		if (!cooldowns.containsKey(playerUUID) || !cooldowns.get(playerUUID).containsKey(command)) {
 			return;
 		}
 
 		if (remainingTime < 60) {
-			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime) + "&e seconds.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime) + "&e seconds for &c" + command + "&e.");
 		} else if (remainingTime < 3600) {
-			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 60) + "&e minutes.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 60) + "&e minutes for &c" + command + "&e.");
 		} else if (remainingTime < 86400) {
-			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 3600) + "&e hours.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 3600) + "&e hours for &c" + command + "&e.");
 		} else {
-			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 86400) + "&e days.");
+			UtilsMessage.sendMessage(player, "&eYou are on cooldown for another &c" + Math.round(remainingTime / 86400) + "&e days for &c" + command + "&e.");
 		}
 	}
-
 
 	//	Show all the player cooldowns
 	public void showCooldowns(@NotNull Player player) {
