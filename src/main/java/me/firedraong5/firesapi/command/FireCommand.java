@@ -1,5 +1,6 @@
 package me.firedraong5.firesapi.command;
 
+import me.firedraong5.firesapi.cooldown.CooldownManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandException;
@@ -52,6 +53,18 @@ public abstract class FireCommand extends BukkitCommand {
 			if (permission != null && !permission.isEmpty()) {
 				checkPermission(sender, permission);
 			}
+
+			if (sender instanceof Player player) {
+				CooldownManager cooldownManager = CooldownManager.getInstance();
+
+				if (cooldownManager.isCooldownActive(player, commandLabel)) {
+					cooldownManager.sendCooldownMessage(player);
+					return true;
+				}
+
+				cooldownManager.startCooldown(player, commandLabel);
+			}
+
 			executeCommand(sender, args);
 		} catch (CommandException e) {
 			sender.sendMessage(ChatColor.RED + e.getMessage());
