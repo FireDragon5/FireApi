@@ -50,7 +50,7 @@ public class FireMenu {
 		this.player = player;
 		this.title = name;
 		this.size = size;
-		this.inventory = Bukkit.createInventory(player, size, Component.text(UtilsMessage.onChat(name)));
+		this.inventory = Bukkit.createInventory(player, size, UtilsMessage.onChat(name));
 	}
 
 	/**
