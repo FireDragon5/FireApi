@@ -86,4 +86,5 @@ public class CooldownManager {
 		String permission = bypassPermissions.get(name);
 		return permission != null && (player.hasPermission(permission) || player.isOp());
 	}
+
 }
