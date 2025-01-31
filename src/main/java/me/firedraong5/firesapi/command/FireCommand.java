@@ -53,19 +53,6 @@ public abstract class FireCommand extends BukkitCommand {
 			if (permission != null && !permission.isEmpty()) {
 				checkPermission(sender, permission);
 			}
-
-			if (sender instanceof Player player) {
-				CooldownManager cooldownManager = CooldownManager.getInstance();
-				String commandName = commandLabel.toLowerCase();
-
-				if (cooldownManager.isCommandCooldownActive(player, commandName)) {
-					cooldownManager.sendCooldownMessage(player, commandName);
-					return true;
-				}
-
-				cooldownManager.startCommandCooldown(player, commandName);
-			}
-
 			executeCommand(sender, args);
 		} catch (CommandException e) {
 			sender.sendMessage(ChatColor.RED + e.getMessage());
@@ -75,6 +62,7 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 		return true;
 	}
+
 	private static void registerCommand(BukkitCommand command) {
 		if (commandMap == null) {
 			commandMap = getCommandMap();
