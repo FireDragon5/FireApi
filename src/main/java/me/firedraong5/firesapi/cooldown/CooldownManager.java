@@ -1,6 +1,7 @@
 package me.firedraong5.firesapi.cooldown;
 
 
+import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -80,6 +81,13 @@ public class CooldownManager {
 
 	public void removeFeatureCooldown(Player player) {
 		featureCooldowns.remove(player.getUniqueId());
+	}
+
+	public void sendCooldownMessage(Player player, String name) {
+		long remainingTime = getRemainingCommandCooldown(player, name);
+		if (remainingTime > 0) {
+			UtilsMessage.sendMessage(player, "&cYou must wait &e" + remainingTime / 1000 + " &cseconds before using this command again.");
+		}
 	}
 
 	private boolean hasBypassPermission(Player player, String name) {
