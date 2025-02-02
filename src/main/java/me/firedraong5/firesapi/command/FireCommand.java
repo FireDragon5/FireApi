@@ -122,6 +122,24 @@ public abstract class FireCommand extends BukkitCommand {
 				.collect(Collectors.toList());
 	}
 
+	protected List<String> suggestPlayers(String prefix, CommandSender self, boolean showSelf) {
+		return Bukkit.getOnlinePlayers().stream()
+				.filter(player -> showSelf || !player.equals(self))
+				.map(Player::getName)
+				.filter(name -> name.toLowerCase().startsWith(prefix.toLowerCase()))
+				.collect(Collectors.toList());
+	}
+
+	protected List<String> suggestPlayers(String prefix) {
+		return Bukkit.getOnlinePlayers().stream()
+				.map(Player::getName)
+				.filter(name -> name.toLowerCase().startsWith(prefix.toLowerCase()))
+				.collect(Collectors.toList());
+	}
+
+
+
+
 	public boolean canSenderView(CommandSender sender) {
 		// Check if the sender can view the command based on permissions
 		return permission == null || sender.hasPermission(permission);

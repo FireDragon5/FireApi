@@ -30,7 +30,7 @@ public class UtilsMessage implements Listener {
 	}
 
 	//	Method that will add a prefix to all the sendMessage
-	public void setPrefix(String prefix) {
+	public static void setPrefix(String prefix) {
 		UtilsMessage.prefix = prefix;
 	}
 
