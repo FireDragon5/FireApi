@@ -3,6 +3,7 @@ package me.firedraong5.firesapi.utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.title.Title;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.*;
 
 
@@ -251,9 +253,12 @@ public class UtilsMessage implements Listener {
 	 * @param fadeOut Fade out time - 20 ticks = 1 second
 	 */
 	public static void titleMessage(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut){
-		player.sendTitle(onChat(title), onChat(subtitle), fadeIn, stay, fadeOut);
+		player.showTitle(Title.title(
+				Component.text(onChat(title)),
+				Component.text(onChat(subtitle)),
+				Title.Times.times(Duration.ofMillis(fadeIn * 50L), Duration.ofMillis(stay * 50L), Duration.ofMillis(fadeOut * 50L))
+		));
 	}
-
 
 	/**
 	 * Title message to send to the player
@@ -265,9 +270,12 @@ public class UtilsMessage implements Listener {
 	 * @param subtitle Subtitle to send
 	 */
 	public static void titleMessage(Player player, String title, String subtitle){
-		player.sendTitle(onChat(title), onChat(subtitle), 10, 70, 20);
+		player.showTitle(Title.title(
+				Component.text(onChat(title)),
+				Component.text(onChat(subtitle)),
+				Title.Times.times(Duration.ofMillis(10 * 50L), Duration.ofMillis(70 * 50L), Duration.ofMillis(20 * 50L))
+		));
 	}
-
 
 //	Action bar message
 	/**
@@ -275,9 +283,8 @@ public class UtilsMessage implements Listener {
 	 * @param player Player to send the message
 	 * @param message Message to send
 	 */
-	public static void actionBarMessage(Player player, String message){
-		player.sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(onChat(message)));
-
+	public static void actionBarMessage(Player player, String message) {
+		player.sendActionBar(Component.text(onChat(message)));
 	}
 
 /*
