@@ -23,10 +23,21 @@ public class UtilsMessage implements Listener {
 
 	static Map<UUID, List<String>> delayMessage = new HashMap<>();
 	private static final Map<String, Object> placeholders = new HashMap<>();
+	private static String prefix;
 
 	public static void addPlaceholder(String placeholder, Object value) {
 		placeholders.put(placeholder, value);
 	}
+
+	//	Method that will add a prefix to all the sendMessage
+	public void setPrefix(String prefix) {
+		UtilsMessage.prefix = prefix;
+	}
+
+	private static String getPrefix() {
+		return prefix;
+	}
+
 
 	public static String replacePlaceholders(String message, Player player) {
 		addPlaceholder("%player%", player.displayName());
@@ -134,8 +145,17 @@ public class UtilsMessage implements Listener {
 	 * @param sender CommandSender to send the message
 	 * @param message Message to send
 	 */
+	public static void sendMessage(CommandSender sender, String message, boolean prefix) {
+		if (prefix) {
+			sender.sendMessage(getPrefix() + onChat(message));
+		} else {
+			sender.sendMessage(onChat(message));
+		}
+	}
+
+	// Overloaded method with default prefix value
 	public static void sendMessage(CommandSender sender, String message) {
-		sender.sendMessage(onChat(message));
+		sendMessage(sender, message, false);
 	}
 
 

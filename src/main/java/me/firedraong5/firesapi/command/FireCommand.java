@@ -113,8 +113,9 @@ public abstract class FireCommand extends BukkitCommand {
 		}
 	}
 
-	protected List<String> suggestPlayers(String prefix) {
+	protected List<String> suggestPlayers(String prefix, Player self, boolean showSelf) {
 		return Bukkit.getOnlinePlayers().stream()
+				.filter(player -> showSelf || !player.equals(self))
 				.map(Player::getName)
 				.filter(name -> name.toLowerCase().startsWith(prefix.toLowerCase()))
 				.collect(Collectors.toList());

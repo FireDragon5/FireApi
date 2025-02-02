@@ -26,8 +26,8 @@ public class CooldownManager {
 		return instance;
 	}
 
-	public void setCooldownTime(String name, long cooldownTimeInMil) {
-		cooldownTimes.put(name, cooldownTimeInMil);
+	public void setCooldownTime(String name, long cooldownTimeInMinutes) {
+		cooldownTimes.put(name, cooldownTimeInMinutes * 1000);
 	}
 
 	public void setCooldownBypassPermission(String permission, String name) {
