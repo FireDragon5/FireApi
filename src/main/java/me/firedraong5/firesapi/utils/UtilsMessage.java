@@ -4,8 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.title.Title;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -55,6 +53,7 @@ public class UtilsMessage implements Listener {
 	 * @return String translated
 	 */
 	@Contract("_ -> new")
+	@SuppressWarnings("deprecation")
 	public static @NotNull String onChat(String s) {
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}

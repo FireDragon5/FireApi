@@ -1,9 +1,9 @@
 package me.firedraong5.firesapi.command;
 
-import me.firedraong5.firesapi.cooldown.CooldownManager;
+import me.firedraong5.firesapi.utils.UtilsMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 public abstract class FireCommand extends BukkitCommand {
 
 	private final List<String> allAliases;
@@ -55,9 +56,9 @@ public abstract class FireCommand extends BukkitCommand {
 			}
 			executeCommand(sender, args);
 		} catch (CommandException e) {
-			sender.sendMessage(ChatColor.RED + e.getMessage());
+			UtilsMessage.sendMessage(sender, "&c" + e.getMessage());
 		} catch (Exception e) {
-			sender.sendMessage(ChatColor.RED + "An unexpected error occurred while executing the command.");
+			UtilsMessage.sendMessage(sender, "&cAn error occurred while executing this command.");
 			e.printStackTrace();
 		}
 		return true;
@@ -70,7 +71,7 @@ public abstract class FireCommand extends BukkitCommand {
 		if (commandMap != null) {
 			commandMap.register(command.getLabel(), command);
 		} else {
-			Bukkit.getLogger().severe("Failed to register command: " + command.getLabel());
+			Objects.requireNonNull(Bukkit.getPluginCommand(command.getLabel())).setExecutor((CommandExecutor) command);
 		}
 	}
 
