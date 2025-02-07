@@ -91,13 +91,21 @@ public class CooldownManager {
 	}
 
 	//	Cooldown time converter
-	public String convertTime(long timeInSeconds) {
-		long hours = timeInSeconds / 3600;
-		long minutes = (timeInSeconds % 3600) / 60;
-		long seconds = timeInSeconds % 60;
-
-		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+	public String convertTime(long time) {
+		long seconds = time / 1000;
+		long minutes = seconds / 60;
+		long hours = minutes / 60;
+		long days = hours / 24;
+		if (days > 0) {
+			return days + "d " + hours % 24 + "h";
+		} else if (hours > 0) {
+			return hours + "h " + minutes % 60 + "m";
+		} else if (minutes > 0) {
+			return minutes + "m " + seconds % 60 + "s";
+		} else {
+			return seconds + "s";
 		}
+	}
 
 	private boolean hasBypassPermission(Player player, String name) {
 		String permission = bypassPermissions.get(name);
