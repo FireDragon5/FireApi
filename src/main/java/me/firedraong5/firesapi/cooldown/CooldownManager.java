@@ -91,7 +91,7 @@ public class CooldownManager {
 	}
 
 	//	Cooldown time converter
-	public static String convertTime(long timeInSeconds) {
+	public String convertTime(long timeInSeconds) {
 		long hours = timeInSeconds / 3600;
 		long minutes = (timeInSeconds % 3600) / 60;
 		long seconds = timeInSeconds % 60;
