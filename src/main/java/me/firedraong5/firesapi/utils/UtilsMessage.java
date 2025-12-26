@@ -74,11 +74,8 @@ public class UtilsMessage implements Listener {
 
 
 /*
-
 	Normal player messages
-
  */
-
 
 	/**
 	 *
@@ -139,7 +136,6 @@ public class UtilsMessage implements Listener {
 		}
 	}
 
-
 	/**
 	 * Send a message to the command sender
 	 *
@@ -191,8 +187,58 @@ public class UtilsMessage implements Listener {
 		player.sendMessage(onChat("&8[&c✖&8] &7" + message));
 	}
 
+    /**
+     * Send a framed message to the player
+     * @param player Player to send the message
+     * @param title Title of the message
+     * @param lines Lines of the message
+     */
+    public static void sendFramedMessage(Player player, String title, List<String> lines) {
+        UtilsMessage.sendMessage(player, "&8&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        if (title != null && !title.isEmpty()) {
+            UtilsMessage.sendMessage(player, "&6&l" + title);
+            UtilsMessage.sendMessage(player, "");
+        }
 
+        for (String line : lines) {
+            UtilsMessage.sendMessage(player, line);
+        }
 
+        UtilsMessage.sendMessage(player, "&8&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    }
+
+    /**
+     * Send a framed message to the player
+     * @param player Player to send the message
+     * @param title Title of the message
+     * @param lines Lines of the message
+     */
+    public static void sendFramedMessage(Player player, String title, String... lines) {
+        UtilsMessage.sendMessage(player, "&8&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        if (title != null && !title.isEmpty()) {
+            UtilsMessage.sendMessage(player, "&6&l" + title);
+            UtilsMessage.sendMessage(player, "");
+        }
+
+        for (String line : lines) {
+            UtilsMessage.sendMessage(player, line);
+        }
+
+        UtilsMessage.sendMessage(player, "&8&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    }
+
+    /**
+     * Send a usage message to the player
+     * @param player Player to send the message
+     * @param commandLabel Command label
+     * @param title Title of the message
+     * @param lines Lines of the message
+     */
+    public static void sendUsageMessage(Player player, String commandLabel, String title, String... lines) {
+        // Optional little error header
+        UtilsMessage.errorMessage(player, "&7Invalid usage of &e/" + commandLabel + "&7.");
+        sendFramedMessage(player, title, lines);
+    }
 
 	/**
 	 * This will send the player a message with the prefix &8[&e!&8]
@@ -287,11 +333,8 @@ public class UtilsMessage implements Listener {
 	}
 
 /*
-
 	Server Chat Messages
-
  */
-
 
 	/**
 	 * Clickable message to send to the player
@@ -303,11 +346,8 @@ public class UtilsMessage implements Listener {
 
 		player.sendMessage(String.valueOf(Component.text(onChat(message))
 				.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, command)))
-
 		);
-
 	}
-
 
 	/**
 	 * Hover text to send to the player
