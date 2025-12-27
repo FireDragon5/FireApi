@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 /**
  * Base class for creating custom commands with automatic registration.
- *
  * Features:
  * - Automatic command registration via reflection
  * - Built-in permission checking
@@ -260,8 +259,8 @@ public abstract class FireCommand extends BukkitCommand {
      */
     protected List<String> suggestPlayers(String prefix, CommandSender self, boolean showSelf) {
         return Bukkit.getOnlinePlayers().stream()
-                .filter(player -> showSelf || !player.getName().equals(self.getName()))
                 .map(Player::getName)
+                .filter(name -> showSelf || !name.equals(self.getName()))
                 .filter(name -> name.toLowerCase().startsWith(prefix.toLowerCase()))
                 .sorted()
                 .collect(Collectors.toList());
