@@ -1,6 +1,6 @@
-package me.firedraong5.firesapi.itemCreation;
+package me.firedragon5.firesapi.itemCreation;
 
-import me.firedraong5.firesapi.utils.UtilsMessage;
+import me.firedragon5.firesapi.utils.UtilsMessage;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;

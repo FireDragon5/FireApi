@@ -1,15 +1,13 @@
-package me.firedraong5.firesapi;
+package me.firedragon5.firesapi;
 
 
-import me.firedraong5.firesapi.utils.UtilsMessage;
+import me.firedragon5.firesapi.utils.UtilsMessage;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
 public final class FiresApi extends JavaPlugin {
 
-	//    Get the instance of the plugin
 	private static FiresApi instance;
-
 
     @Override
     public void onEnable() {
@@ -19,13 +17,7 @@ public final class FiresApi extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new UtilsMessage(), this);
     }
 
-    @Override
-    public void onDisable() {
-
-
-	}
-
-	public static FiresApi getInstance() {
+    public static FiresApi getInstance() {
 		return instance;
     }
 

@@ -1,4 +1,4 @@
-package me.firedraong5.firesapi.utils;
+package me.firedragon5.firesapi.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -84,6 +84,17 @@ public class UtilsMessage implements Listener {
 	 */
 	public static void sendMessage(Player player, String message) {
 		player.sendMessage(onChat(message));
+	}
+
+
+	/**
+	 * Send a message with prefix
+	 * @param player - Player to send the message
+	 * @param prefix - Prefix
+	 * @param message - Message to send
+	 */
+	public static void sendMessageWithPrefix(Player player,String prefix, String message ) {
+		player.sendMessage(onChat(prefix + message));
 	}
 
 //	info message

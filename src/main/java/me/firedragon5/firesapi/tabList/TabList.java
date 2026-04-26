@@ -1,6 +1,6 @@
-package me.firedraong5.firesapi.tabList;
+package me.firedragon5.firesapi.tabList;
 
-import me.firedraong5.firesapi.utils.UtilsMessage;
+import me.firedragon5.firesapi.utils.UtilsMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

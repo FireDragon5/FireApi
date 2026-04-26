@@ -1,6 +1,6 @@
-package me.firedraong5.firesapi.cooldown;
+package me.firedragon5.firesapi.cooldown;
 
-import me.firedraong5.firesapi.utils.UtilsMessage;
+import me.firedragon5.firesapi.utils.UtilsMessage;
 import org.bukkit.entity.Player;
 
 import java.util.*;

@@ -1,4 +1,4 @@
-package me.firedraong5.firesapi.fileManager;
+package me.firedragon5.firesapi.fileManager;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;

@@ -1,4 +1,4 @@
-package me.firedraong5.firesapi.utils;
+package me.firedragon5.firesapi.utils;
 
 @SuppressWarnings("unused")
 public class UtilsTools {
@@ -16,7 +16,6 @@ public class UtilsTools {
 
 	}
 
-
 	//	isdouble
 	public static boolean isDouble(String string) {
 
@@ -29,5 +28,13 @@ public class UtilsTools {
 
 	}
 
+	public static boolean isNull(Object object) {
+		return object == null;
+	}
+
+//	Check if a string or list is empty
+	public static boolean isEmpty(String string) {
+		return string == null || string.isEmpty();
+	}
 
 }

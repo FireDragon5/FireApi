@@ -1,4 +1,4 @@
-package me.firedraong5.firesapi.utils;
+package me.firedragon5.firesapi.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

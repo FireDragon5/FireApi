@@ -1,6 +1,6 @@
-package me.firedraong5.firesapi.command;
+package me.firedragon5.firesapi.command;
 
-import me.firedraong5.firesapi.utils.UtilsMessage;
+import me.firedragon5.firesapi.utils.UtilsMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;

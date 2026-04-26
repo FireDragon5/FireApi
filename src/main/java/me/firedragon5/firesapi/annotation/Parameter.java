@@ -1,4 +1,4 @@
-package me.firedraong5.firesapi.annotation;
+package me.firedragon5.firesapi.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

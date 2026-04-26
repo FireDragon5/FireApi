@@ -1,7 +1,7 @@
-package me.firedraong5.firesapi.menu;
+package me.firedragon5.firesapi.menu;
 
-import me.firedraong5.firesapi.itemCreation.CustomItemCreator;
-import me.firedraong5.firesapi.utils.UtilsMessage;
+import me.firedragon5.firesapi.itemCreation.CustomItemCreator;
+import me.firedragon5.firesapi.utils.UtilsMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

@@ -1,4 +1,4 @@
-package me.firedraong5.firesapi.error;
+package me.firedragon5.firesapi.error;
 
 public class Valid {
 
