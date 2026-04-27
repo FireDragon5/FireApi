@@ -391,14 +391,18 @@ public class UtilsMessage implements Listener {
 	}
 
 
-
-
-
-
-
-
-
-
-
+	/**
+	 * Send Message to only certain players
+	 * @param message - Message to send
+	 * @param permission - Permission that the player must have to receive the message
+	 */
+//  Send a message only to player with a certain permission
+	public static void sendMessageToPermission(String message, String permission) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.hasPermission(permission)) {
+				player.sendMessage(onChat(message));
+			}
+		}
+	}
 
 }
