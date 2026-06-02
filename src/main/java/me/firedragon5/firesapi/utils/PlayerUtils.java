@@ -16,7 +16,7 @@ public class PlayerUtils {
 	 * @param player Player to teleport
 	 * @param location Location to teleport the player
 	 */
-	public static void teleportPlayer(Player player, Location location) {
+	public void teleportPlayer(Player player, Location location) {
 		player.teleport(location);
 	}
 
@@ -26,7 +26,7 @@ public class PlayerUtils {
 	 *
 	 * @return All the players from the server
 	 */
-	public static Player getAllPlayers() {
+	public Player getAllPlayers() {
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			return player;
@@ -36,7 +36,7 @@ public class PlayerUtils {
 	}
 
 	//	has permission if not send a no permission message
-	public static boolean hasPermission(Player player, String permission) {
+	public boolean hasPermission(Player player, String permission) {
 		if (!player.hasPermission(permission)) {
 			UtilsMessage.errorMessage(player, "&7You don't have the permission to do that!");
 			return false;
@@ -49,6 +49,5 @@ public class PlayerUtils {
 
 		return offlinePlayer.getName();
 	}
-
 
 }
