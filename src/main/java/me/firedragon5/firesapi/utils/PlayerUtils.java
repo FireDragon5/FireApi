@@ -2,7 +2,10 @@ package me.firedragon5.firesapi.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class PlayerUtils {
@@ -32,7 +35,6 @@ public class PlayerUtils {
 		return null;
 	}
 
-
 	//	has permission if not send a no permission message
 	public static boolean hasPermission(Player player, String permission) {
 		if (!player.hasPermission(permission)) {
@@ -40,6 +42,12 @@ public class PlayerUtils {
 			return false;
 		}
 		return true;
+	}
+
+	public String getPlayerName(UUID uuid){
+		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+		return offlinePlayer.getName();
 	}
 
 
