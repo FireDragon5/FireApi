@@ -49,6 +49,4 @@ public class PlayerUtils {
 
 		return offlinePlayer.getName();
 	}
-
-
 }
